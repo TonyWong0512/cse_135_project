@@ -27,6 +27,7 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		response.sendRedirect("login.jsp");
 	}
 
 	/**
@@ -35,8 +36,9 @@ public class Login extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String name = request.getParameter("name");
+		request.getSession().setAttribute("name", name);
 		PrintWriter out = response.getWriter();
-		out.print(name);
+		out.print(request.getSession().getAttribute("name"));
 	}
 
 }
