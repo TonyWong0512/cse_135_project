@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.Category;
 import dao.CategoryDao;
+import dao.ProductDao;
 import util.DbUtil;
 
 /**
@@ -69,18 +70,8 @@ public class Product extends HttpServlet {
 		String sku = request.getParameter("sku");
 		Double price = Double.parseDouble(request.getParameter("price"));
 		int category = Integer.parseInt(request.getParameter("category"));
-		Connection conn = DbUtil.getConnection();
-		try {
-			PreparedStatement ps = conn.prepareStatement("insert into products(name, sku, price, category) values (?, ?, ?, ?)");
-			ps.setString(1, name);
-			ps.setString(2, sku);
-			ps.setBigDecimal(3, new BigDecimal(price));
-			ps.setInt(4, category);
-			ps.executeUpdate();
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		ProductDao dao = new ProductDao();
+		dao.addProduct(new model.Product(name, sku, price, category));
 	}
 
 }
