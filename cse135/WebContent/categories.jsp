@@ -37,7 +37,7 @@
 						<tr>
 
 
-							<form action="/cse135/category" method="PUT">
+							<form action="/cse135/category" method="POST">
 								<input type="hidden" name="action" value="update" /> <input
 									type="hidden" name="id"
 									value="<c:out value="${category.id}" />" />
@@ -57,7 +57,7 @@
 								<%-- Button --%>
 								<td><input type="submit" value="Update"></td>
 							</form>
-							<form action="/cse135/category" method="DELETE">
+							<form action="/cse135/category" method="POST">
 								<input type="hidden" name="action" value="delete" /> <input
 									type="hidden" value="<c:out value="${category.id}" />"
 									name="id" />
