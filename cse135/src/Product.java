@@ -71,7 +71,10 @@ public class Product extends HttpServlet {
 		Double price = Double.parseDouble(request.getParameter("price"));
 		int category = Integer.parseInt(request.getParameter("category"));
 		ProductDao dao = new ProductDao();
-		dao.addProduct(new model.Product(name, sku, price, category));
+		model.Product p = new model.Product(name, sku, price, category);
+		dao.addProduct(p);
+		request.setAttribute("product", p);
+		getServletContext().getRequestDispatcher("/productconfirm.jsp").forward(request, response);
 	}
 
 }
