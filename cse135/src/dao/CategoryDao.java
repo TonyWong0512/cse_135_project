@@ -27,7 +27,6 @@ public class CategoryDao {
             preparedStatement.setString(1, category.getName());
             preparedStatement.setString(2, category.getDescription());
             ret = preparedStatement.executeUpdate();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

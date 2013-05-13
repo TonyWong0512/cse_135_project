@@ -16,7 +16,7 @@ create table products (
 	ID serial primary key,
 	name text not null,
 	sku text unique not null,
-	price decimal(6,2) not null,
+	price decimal(10,2) not null,
 	category integer references categories(ID)
 );
 
