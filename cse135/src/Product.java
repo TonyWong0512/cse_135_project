@@ -4,13 +4,18 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.Category;
+import dao.CategoryDao;
 import util.DbUtil;
 
 /**
@@ -31,7 +36,29 @@ public class Product extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect("product.jsp");
+		/*
+		Connection conn = DbUtil.getConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select name from categories");
+			ResultSet rs = ps.executeQuery();
+			ps.executeUpdate();
+			
+			List<String> result = new ArrayList<String>();
+			while (rs.next()) {
+				result.add(rs.getString("name"));
+			}
+			request.setAttribute("categories", result);
+			
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		getServletContext().getRequestDispatcher("product.jsp").forward(request, response);
+		*/
+		CategoryDao dao = new CategoryDao();
+		request.setAttribute("categories", dao.getAllCategories());
+		getServletContext().getRequestDispatcher("/product.jsp").forward(request, response);
 	}
 
 	/**
@@ -41,14 +68,14 @@ public class Product extends HttpServlet {
 		String name = request.getParameter("name");
 		String sku = request.getParameter("sku");
 		Double price = Double.parseDouble(request.getParameter("price"));
-		String category = request.getParameter("category");
+		int category = Integer.parseInt(request.getParameter("category"));
 		Connection conn = DbUtil.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("insert into products(name, sku, price, category) values (?, ?, ?, ?)");
 			ps.setString(1, name);
 			ps.setString(2, sku);
 			ps.setBigDecimal(3, new BigDecimal(price));
-			ps.setString(4, category);
+			ps.setInt(4, category);
 			ps.executeUpdate();
 			conn.close();
 		} catch (SQLException e) {
