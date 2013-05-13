@@ -34,7 +34,7 @@ public class ProductDao {
         return result;
     }
  	
-	public List<Product> getProduct(String name) {
+	public List<Product> getProductByName(String name) {
         List<Product> result = new ArrayList<Product>();
         try {
             PreparedStatement ps = connection.prepareStatement("select * from products where name = '?'");
@@ -49,7 +49,22 @@ public class ProductDao {
 
         return result;
     }
+	
+	public List<Product> getProductByCategory(String name) {
+        List<Product> result = new ArrayList<Product>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("select * from products, categories where categories.name = '?'");
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            toList(result, rs);
+            rs.close();
+			ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
+        return result;
+    }
 	private void toList(List<Product> result, ResultSet rs) throws SQLException {
 		while (rs.next()) {
 		    Product p = new Product();
