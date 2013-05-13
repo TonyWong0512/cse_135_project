@@ -8,6 +8,9 @@
 <title>Categories</title>
 </head>
 <body>
+	<c:if test="${message != null}" >
+		<p><c:out value="${message}" /></p>
+	</c:if>
 	<h1>Categories List</h1>
 
 	<table>

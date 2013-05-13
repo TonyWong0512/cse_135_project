@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Connection;
@@ -15,6 +16,22 @@ public class CategoryDao {
 	
 	public CategoryDao() {
         connection = DbUtil.getConnection();
+    }
+	
+ 	public int addCategory(Category category) {
+ 		int ret = 0;
+        try {
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("INSERT INTO categories (name, description) VALUES (?, ?)");
+            // Parameters start with 1
+            preparedStatement.setString(1, category.getName());
+            preparedStatement.setString(2, category.getDescription());
+            ret = preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 	
 	public List<Category> getAllCategories() {
