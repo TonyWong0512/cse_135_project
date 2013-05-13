@@ -1,4 +1,4 @@
-﻿create table users (
+create table users (
 	ID serial primary key,
 	name text unique not null,
 	role text,
