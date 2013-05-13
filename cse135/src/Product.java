@@ -57,8 +57,10 @@ public class Product extends HttpServlet {
 		
 		getServletContext().getRequestDispatcher("product.jsp").forward(request, response);
 		*/
-		CategoryDao dao = new CategoryDao();
-		request.setAttribute("categories", dao.getAllCategories());
+		CategoryDao cdao = new CategoryDao();
+		request.setAttribute("categories", cdao.getAllCategories());
+		ProductDao pdao = new ProductDao();
+		request.setAttribute("products", pdao.getAllProducts());
 		getServletContext().getRequestDispatcher("/product.jsp").forward(request, response);
 	}
 
