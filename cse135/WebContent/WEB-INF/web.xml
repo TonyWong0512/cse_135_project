@@ -19,4 +19,14 @@
     <servlet-name>Login</servlet-name>
     <url-pattern>/Login</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Category</display-name>
+    <servlet-name>Category</servlet-name>
+    <servlet-class>Category</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Category</servlet-name>
+    <url-pattern>/category</url-pattern>
+  </servlet-mapping>
 </web-app>

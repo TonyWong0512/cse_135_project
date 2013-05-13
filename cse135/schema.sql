@@ -1,8 +1,8 @@
 create table users (
-	ID serial primary key,
+	id serial primary key,
 	name text unique not null,
 	role text,
-	age short,
+	age smallint,
 	state text
 );
 
@@ -19,3 +19,5 @@ create table products (
 	price decimal(6,2) not null,
 	category integer references categories(ID)
 );
+
+INSERT INTO categories (name, description) values ('Mary', 'Doe');
