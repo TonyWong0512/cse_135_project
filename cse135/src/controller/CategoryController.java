@@ -1,25 +1,31 @@
 package controller;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import dao.CategoryDao;
 
 /**
  * Servlet implementation class Category
  */
 public class CategoryController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private CategoryDao dao;
+	private static String LIST_CATEGORIES = "/categories.jsp";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public CategoryController() {
 		super();
-
+		dao = new CategoryDao();
 	}
 
 	/**
@@ -28,7 +34,13 @@ public class CategoryController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("categories.jsp").forward(request, response);
+		String forward = "";
+
+		forward = LIST_CATEGORIES;
+		request.setAttribute("categories", dao.getAllCategories());
+
+		RequestDispatcher view = request.getRequestDispatcher(forward);
+		view.forward(request, response);
 	}
 
 	@Override
@@ -61,30 +73,29 @@ public class CategoryController extends HttpServlet {
 							+ "user=postgres&password=postgres");
 
 			String action = request.getParameter("action");
-            // Check if an insertion is requested
-            if (action != null && action.equals("insert")) {
+			// Check if an insertion is requested
+			if (action != null && action.equals("insert")) {
 
-                // Begin transaction
-                conn.setAutoCommit(false);
+				// Begin transaction
+				conn.setAutoCommit(false);
 
-                // Create the prepared statement and use it to
-                // INSERT category values INTO the categories table.
-                pstmt = conn
-                .prepareStatement("INSERT INTO categories (name, description) VALUES (?, ?)");
+				// Create the prepared statement and use it to
+				// INSERT category values INTO the categories table.
+				pstmt = conn
+						.prepareStatement("INSERT INTO categories (name, description) VALUES (?, ?)");
 
-                pstmt.setString(1, request.getParameter("name"));
-                pstmt.setString(2, request.getParameter("description"));
-                int rowCount = pstmt.executeUpdate();
+				pstmt.setString(1, request.getParameter("name"));
+				pstmt.setString(2, request.getParameter("description"));
+				int rowCount = pstmt.executeUpdate();
 
-                // Commit transaction
-                conn.commit();
-                conn.setAutoCommit(true);
-            }
-            
+				// Commit transaction
+				conn.commit();
+				conn.setAutoCommit(true);
+			}
 
 			// Close the Connection
 			conn.close();
-			
+
 			PrintWriter out = response.getWriter();
 			out.print(request.getSession().getAttribute("name"));
 
@@ -94,7 +105,7 @@ public class CategoryController extends HttpServlet {
 			throw new RuntimeException(e);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			// Release resources in a finally block in reverse-order of
 			// their creation
 			if (pstmt != null) {
@@ -112,7 +123,8 @@ public class CategoryController extends HttpServlet {
 				conn = null;
 			}
 		}
-        request.getRequestDispatcher("categories.jsp").forward(request, response);
+		request.getRequestDispatcher("categories.jsp").forward(request,
+				response);
 	}
 
 }

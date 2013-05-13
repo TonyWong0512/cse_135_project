@@ -2,16 +2,16 @@ package model;
 
 public class Category {
 
-	private int categoryid;
+	private int id;
 	private String name;
 	private String description;
 
-	public int getCategoryid() {
-		return categoryid;
+	public int getId() {
+		return id;
 	}
 
-	public void setCategoryid(int categoryid) {
-		this.categoryid = categoryid;
+	public void setId(int categoryid) {
+		this.id = categoryid;
 	}
 
 	public String getName() {
@@ -32,7 +32,7 @@ public class Category {
 
 	@Override
 	public String toString() {
-		return "Category [categoryid=" + categoryid + ", name=" + name
+		return "Category [id=" + id + ", name=" + name
 				+ ", description=" + description + "]";
 	}
 
