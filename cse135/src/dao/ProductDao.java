@@ -37,7 +37,7 @@ public class ProductDao {
 	public List<Product> getProduct(String name) {
         List<Product> result = new ArrayList<Product>();
         try {
-            PreparedStatement ps = connection.prepareStatement("select * from products where name = ?");
+            PreparedStatement ps = connection.prepareStatement("select * from products where name = '?'");
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
             toList(result, rs);
