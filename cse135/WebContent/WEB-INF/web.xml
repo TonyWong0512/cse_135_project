@@ -21,12 +21,12 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>Category</display-name>
-    <servlet-name>Category</servlet-name>
-    <servlet-class>Category</servlet-class>
+    <display-name>CategoryController</display-name>
+    <servlet-name>CategoryController</servlet-name>
+    <servlet-class>controller.CategoryController</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>Category</servlet-name>
+    <servlet-name>CategoryController</servlet-name>
     <url-pattern>/category</url-pattern>
   </servlet-mapping>
 </web-app>

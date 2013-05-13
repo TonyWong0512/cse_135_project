@@ -1,3 +1,4 @@
+package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -10,13 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Category
  */
-public class Category extends HttpServlet {
+public class CategoryController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public Category() {
+	public CategoryController() {
 		super();
 
 	}
@@ -28,6 +29,18 @@ public class Category extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("categories.jsp").forward(request, response);
+	}
+
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		super.doDelete(req, resp);
+	}
+
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		super.doPut(req, resp);
 	}
 
 	/**
