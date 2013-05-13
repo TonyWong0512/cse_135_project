@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.Category;
+
 import dao.CategoryDao;
 
 /**
@@ -55,76 +57,31 @@ public class CategoryController extends HttpServlet {
 		super.doPut(req, resp);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		try {
-			// Registering Postgresql JDBC driver with the DriverManager
-			Class.forName("org.postgresql.Driver");
+		String forward = "";
 
-			// Open a connection to the database using DriverManager
-			conn = DriverManager
-					.getConnection("jdbc:postgresql://localhost/postgres?"
-							+ "user=postgres&password=postgres");
-
-			String action = request.getParameter("action");
-			// Check if an insertion is requested
-			if (action != null && action.equals("insert")) {
-
-				// Begin transaction
-				conn.setAutoCommit(false);
-
-				// Create the prepared statement and use it to
-				// INSERT category values INTO the categories table.
-				pstmt = conn
-						.prepareStatement("INSERT INTO categories (name, description) VALUES (?, ?)");
-
-				pstmt.setString(1, request.getParameter("name"));
-				pstmt.setString(2, request.getParameter("description"));
-				int rowCount = pstmt.executeUpdate();
-
-				// Commit transaction
-				conn.commit();
-				conn.setAutoCommit(true);
-			}
-
-			// Close the Connection
-			conn.close();
-
-			PrintWriter out = response.getWriter();
-			out.print(request.getSession().getAttribute("name"));
-
-		} catch (SQLException e) {
-			// Wrap the SQL exception in a runtime exception to propagate
-			// it upwards
-			throw new RuntimeException(e);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} finally {
-			// Release resources in a finally block in reverse-order of
-			// their creation
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-				} // Ignore
-				pstmt = null;
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-				} // Ignore
-				conn = null;
+		forward = LIST_CATEGORIES;
+		
+		// Create the new object that will be added
+		Category category = new Category();
+		category.setName(request.getParameter("name"));
+		category.setDescription(request.getParameter("description"));
+		int dao_ret;
+		if (!category.getName().equals("") && !category.getDescription().equals("")) {
+			dao_ret = dao.addCategory(category);
+			if (dao_ret>0){
+				request.setAttribute("message", "The category was successfully added");
+			}else{
+				request.setAttribute("message", "There was a problem adding the category");
 			}
 		}
-		request.getRequestDispatcher("categories.jsp").forward(request,
-				response);
+		
+		RequestDispatcher view = request.getRequestDispatcher(forward);
+		
+		request.removeAttribute("categories");
+		request.setAttribute("categories", dao.getAllCategories());
+		
+		view.forward(request, response);
 	}
-
 }
