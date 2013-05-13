@@ -39,14 +39,14 @@ public class Signup extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String name = request.getParameter("name");
 		String role = request.getParameter("role");
-		String age =  request.getParameter("age");
+		short age =  Short.parseShort(request.getParameter("age"));
 		String state = request.getParameter("state");
 		Connection conn = DbUtil.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("insert into users(name, role, age, state) values (?, ?, ?, ?)");
 			ps.setString(1, name);
 			ps.setString(2, role);
-			ps.setString(3, age);
+			ps.setShort(3, age);
 			ps.setString(4, state);
 			ps.executeUpdate();
 			conn.close();
