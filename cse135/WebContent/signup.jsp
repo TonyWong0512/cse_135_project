@@ -4,12 +4,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Login</title>
+<title>Insert title here</title>
 </head>
 <body>
-<form method="POST" action="login">
+<form action="signup" method="post">
 <label>Name</label><input type="text" name="name"></input>
-<input type="submit" value="Submit">
+<label>Role</label><input type="text" name="role"></input>
+<label>Age</label><input type="text" name="age"></input>
+<label>State</label><input type="text" name="state"></input>
+<input type="submit" value="Sign up">
 </form>
 
 </body>
