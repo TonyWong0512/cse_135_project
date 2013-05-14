@@ -47,7 +47,11 @@ category = (category == null) ? "" : category.trim();
 		<c:out value="${product.name}" /><br>
 		<c:out value="${product.SKU}" /><br>
 		<c:out value="${product.price}" /><br>
-		<a href="edit?name=<%=name%>&category=">All products</a><br>
+		<form action="product" method="delete">
+			<input type="hidden" name="id" value="<c:out value="${product.ID}" />"></input>
+			<a href="editproduct?ID=<c:out value="${product.ID}" />">Edit</a><input type="submit" value="Delete">
+		</form>
+		
 	</div>
 	</c:forEach>
 </div>
