@@ -83,5 +83,4 @@ public class Product extends HttpServlet {
 		request.setAttribute("product", p);
 		getServletContext().getRequestDispatcher("/productconfirm.jsp").forward(request, response);
 	}
-
 }

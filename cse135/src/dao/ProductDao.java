@@ -33,6 +33,19 @@ public class ProductDao {
 		}
 		return result;
 	}
+	
+	public int deleteProduct(int id) {
+		int result = 0;
+		try {
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("delete from products where ID = ?");
+			preparedStatement.setInt(1, id);
+			result = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	public List<Product> getProductByName(String name) {
 		List<Product> result = new ArrayList<Product>();

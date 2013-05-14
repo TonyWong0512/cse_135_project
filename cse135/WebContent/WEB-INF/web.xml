@@ -49,4 +49,14 @@
     <servlet-name>Product</servlet-name>
     <url-pattern>/product</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeleteProduct</display-name>
+    <servlet-name>DeleteProduct</servlet-name>
+    <servlet-class>DeleteProduct</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteProduct</servlet-name>
+    <url-pattern>/deleteproduct</url-pattern>
+  </servlet-mapping>
 </web-app>
