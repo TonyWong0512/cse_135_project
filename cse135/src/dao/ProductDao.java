@@ -13,84 +13,103 @@ import util.DbUtil;
 
 public class ProductDao {
 	private Connection connection;
-	
+
 	public ProductDao() {
-        connection = DbUtil.getConnection();
-    }
-	
- 	public int addProduct(Product product) {
- 		int result = 0;
-        try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("insert into products(name, sku, price, category) values(?, ?, ?, ?)");
-            preparedStatement.setString(1, product.getName());
-            preparedStatement.setString(2, product.getSKU());
-            preparedStatement.setBigDecimal(3, product.getPrice());
-            preparedStatement.setInt(4, product.getCategory());
-            result = preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
- 	
+		connection = DbUtil.getConnection();
+	}
+
+	public int addProduct(Product product) {
+		int result = 0;
+		try {
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("insert into products(name, sku, price, category) values(?, ?, ?, ?)");
+			preparedStatement.setString(1, product.getName());
+			preparedStatement.setString(2, product.getSKU());
+			preparedStatement.setBigDecimal(3, product.getPrice());
+			preparedStatement.setInt(4, product.getCategory());
+			result = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	public List<Product> getProductByName(String name) {
-        List<Product> result = new ArrayList<Product>();
-        try {
-            PreparedStatement ps = connection.prepareStatement("select * from products where name = ?");
-            ps.setString(1, name);
-            ResultSet rs = ps.executeQuery();
-            toList(result, rs);
-            rs.close();
+		List<Product> result = new ArrayList<Product>();
+		try {
+			PreparedStatement ps = connection
+					.prepareStatement("select * from products where name = ?");
+			ps.setString(1, name);
+			ResultSet rs = ps.executeQuery();
+			toList(result, rs);
+			rs.close();
 			ps.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-        return result;
-    }
-	
+		return result;
+	}
+
 	public List<Product> getProductByCategory(String name) {
-        List<Product> result = new ArrayList<Product>();
-        try {
-            PreparedStatement ps = connection.prepareStatement("select * from products, categories where categories.name = ? and products.category = categories.ID");
-            ps.setString(1, name);
-            ResultSet rs = ps.executeQuery();
-            toList(result, rs);
-            rs.close();
+		List<Product> result = new ArrayList<Product>();
+		try {
+			PreparedStatement ps = connection
+					.prepareStatement("select * from products, categories where categories.name = ? and products.category = categories.ID");
+			ps.setString(1, name);
+			ResultSet rs = ps.executeQuery();
+			toList(result, rs);
+			rs.close();
 			ps.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-        return result;
-    }
+		return result;
+	}
+
 	private void toList(List<Product> result, ResultSet rs) throws SQLException {
 		while (rs.next()) {
-		    Product p = new Product();
-		    p.setID(rs.getInt("id"));
-		    p.setName(rs.getString("name"));
-		    p.setSKU(rs.getString("SKU"));
-		    p.setPrice(rs.getBigDecimal("price"));
-		    p.setCategory(rs.getInt("category"));
-		    result.add(p);
-		    System.out.println(rs.getString("name"));
+			Product p = new Product();
+			p.setID(rs.getInt("id"));
+			p.setName(rs.getString("name"));
+			p.setSKU(rs.getString("SKU"));
+			p.setPrice(rs.getBigDecimal("price"));
+			p.setCategory(rs.getInt("category"));
+			result.add(p);
 		}
 	}
-	
-	public List<Product> getAllProducts() {
-        List<Product> result = new ArrayList<Product>();
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("select * from products");
-            toList(result, rs);
-            rs.close();
-			statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        return result;
-    }
+	public List<Product> getAllProducts() {
+		List<Product> result = new ArrayList<Product>();
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery("select * from products");
+			toList(result, rs);
+			rs.close();
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public List<model.Product> getProduct(String product, String category) {
+		List<Product> result = new ArrayList<Product>();
+		try {
+			PreparedStatement ps = connection
+					.prepareStatement("select * from products, categories where products.name = ? and categories.name = ? and products.category = categories.ID");
+			ps.setString(1, product);
+			ps.setString(2, category);
+			ResultSet rs = ps.executeQuery();
+			toList(result, rs);
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 }
