@@ -40,13 +40,18 @@ public class Product extends HttpServlet {
 		CategoryDao cdao = new CategoryDao();
 		request.setAttribute("categories", cdao.getAllCategories());
 		
-		String category = request.getParameter("category");
+		int category;
+		try {
+			category = Integer.parseInt(request.getParameter("category"));
+		} catch (Exception e) {
+			category = -1;
+		}
 		String name = request.getParameter("name");
 		
 		ProductDao pdao = new ProductDao();
 		List<model.Product> products = null;
 
-		if (category == null || category.trim() == "") {
+		if (category == -1) {
 			if (name == null || name.trim() == "") {
 				products = pdao.getAllProducts();
 			} else {
@@ -54,7 +59,7 @@ public class Product extends HttpServlet {
 			}
 		} else {
 			if (name == null || name.trim() == "") {
-				products = pdao.getProductByCategory(category);
+				products = pdao.getProduct(category);
 			} else {
 				products = pdao.getProduct(name, category);
 			}

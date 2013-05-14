@@ -51,12 +51,12 @@ public class ProductDao {
 		return result;
 	}
 
-	public List<Product> getProductByCategory(String name) {
+	public List<Product> getProduct(int id) {
 		List<Product> result = new ArrayList<Product>();
 		try {
 			PreparedStatement ps = connection
-					.prepareStatement("select * from products, categories where categories.name = ? and products.category = categories.ID");
-			ps.setString(1, name);
+					.prepareStatement("select * from products, categories where categories.ID = ? and products.category = categories.ID");
+			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			toList(result, rs);
 			rs.close();
@@ -95,13 +95,13 @@ public class ProductDao {
 		return result;
 	}
 
-	public List<model.Product> getProduct(String product, String category) {
+	public List<model.Product> getProduct(String product, int category) {
 		List<Product> result = new ArrayList<Product>();
 		try {
 			PreparedStatement ps = connection
-					.prepareStatement("select * from products, categories where products.name = ? and categories.name = ? and products.category = categories.ID");
+					.prepareStatement("select * from products, categories where products.name = ? and categories.ID = ? and products.category = categories.ID");
 			ps.setString(1, product);
-			ps.setString(2, category);
+			ps.setInt(2, category);
 			ResultSet rs = ps.executeQuery();
 			toList(result, rs);
 			rs.close();
