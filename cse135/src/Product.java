@@ -37,30 +37,19 @@ public class Product extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		/*
-		Connection conn = DbUtil.getConnection();
-		try {
-			PreparedStatement ps = conn.prepareStatement("select name from categories");
-			ResultSet rs = ps.executeQuery();
-			ps.executeUpdate();
-			
-			List<String> result = new ArrayList<String>();
-			while (rs.next()) {
-				result.add(rs.getString("name"));
-			}
-			request.setAttribute("categories", result);
-			
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		getServletContext().getRequestDispatcher("product.jsp").forward(request, response);
-		*/
 		CategoryDao cdao = new CategoryDao();
 		request.setAttribute("categories", cdao.getAllCategories());
+		
 		ProductDao pdao = new ProductDao();
-		request.setAttribute("products", pdao.getAllProducts());
+		List<model.Product> products = null;
+		String category = request.getParameter("category");
+		if (category != null) {
+			products = pdao.getProductByCategory(category);
+		} else {
+			products = pdao.getAllProducts();
+		}
+		request.setAttribute("products", products);
+		
 		getServletContext().getRequestDispatcher("/product.jsp").forward(request, response);
 	}
 

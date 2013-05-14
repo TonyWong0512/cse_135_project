@@ -37,7 +37,7 @@ public class ProductDao {
 	public List<Product> getProductByName(String name) {
         List<Product> result = new ArrayList<Product>();
         try {
-            PreparedStatement ps = connection.prepareStatement("select * from products where name = '?'");
+            PreparedStatement ps = connection.prepareStatement("select * from products where name = ?");
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
             toList(result, rs);
@@ -53,7 +53,7 @@ public class ProductDao {
 	public List<Product> getProductByCategory(String name) {
         List<Product> result = new ArrayList<Product>();
         try {
-            PreparedStatement ps = connection.prepareStatement("select * from products, categories where categories.name = '?'");
+            PreparedStatement ps = connection.prepareStatement("select * from products, categories where categories.name = ? and products.category = categories.ID");
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
             toList(result, rs);
@@ -74,6 +74,7 @@ public class ProductDao {
 		    p.setPrice(rs.getBigDecimal("price"));
 		    p.setCategory(rs.getInt("category"));
 		    result.add(p);
+		    System.out.println(rs.getString("name"));
 		}
 	}
 	
