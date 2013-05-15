@@ -3,8 +3,20 @@ package model;
 public class User {
 	private int ID;
 	private String name;
+	private String role;
 	private short age;
 	private String state;
+	
+	public User() {
+		super();
+	}
+
+	public User(String name, String role, short age, String state) {
+		this.name = name;
+		this.role = role;
+		this.age = age;
+		this.state = state;
+	}
 
 	public int getID() {
 		return ID;
@@ -36,5 +48,13 @@ public class User {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 }

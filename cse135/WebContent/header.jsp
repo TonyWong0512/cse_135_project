@@ -8,3 +8,6 @@
 <link href="bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<% String user = (String)pageContext.getSession().getAttribute("name"); %>
+Hello 
+<%= (user != null) ? user : "" %>

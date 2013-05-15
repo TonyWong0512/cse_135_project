@@ -9,6 +9,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import dao.UserDao;
+
+import model.User;
 
 import util.DbUtil;
 
@@ -30,7 +35,7 @@ public class Signup extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect("signup.jsp");;
+		response.sendRedirect("signup.jsp");
 	}
 
 	/**
@@ -41,18 +46,18 @@ public class Signup extends HttpServlet {
 		String role = request.getParameter("role");
 		short age =  Short.parseShort(request.getParameter("age"));
 		String state = request.getParameter("state");
-		Connection conn = DbUtil.getConnection();
-		try {
-			PreparedStatement ps = conn.prepareStatement("insert into users(name, role, age, state) values (?, ?, ?, ?)");
-			ps.setString(1, name);
-			ps.setString(2, role);
-			ps.setShort(3, age);
-			ps.setString(4, state);
-			ps.executeUpdate();
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		User u = new User(name, role, age, state);
+		UserDao dao = new UserDao();
+		dao.addUser(u);
+		if (role.contains("owner")) {
+			response.sendRedirect("product.jsp");
+		} else {
+			response.sendRedirect("browse.jsp");
 		}
+		HttpSession session = request.getSession();
+		session.setAttribute("name", name);
+		session.setAttribute("role", role);
+
 	}
 
 }
