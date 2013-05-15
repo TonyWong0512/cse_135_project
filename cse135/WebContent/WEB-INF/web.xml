@@ -60,13 +60,23 @@
     <url-pattern>/deleteproduct</url-pattern>
   </servlet-mapping>
     <servlet>
+	<description></description>
+	<display-name>Browse</display-name>
+	<servlet-name>Browse</servlet-name>
+	<servlet-class>Browse</servlet-class>
+</servlet>
+	<servlet-mapping>
+		<servlet-name>Browse</servlet-name>
+		<url-pattern>/browse</url-pattern>
+	</servlet-mapping>
+	<servlet>
     <description></description>
-    <display-name>Browse</display-name>
-    <servlet-name>Browse</servlet-name>
-    <servlet-class>Browse</servlet-class>
+    <display-name>ShoppingController</display-name>
+    <servlet-name>ShoppingController</servlet-name>
+    <servlet-class>controller.ShoppingController</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>Browse</servlet-name>
-    <url-pattern>/browse</url-pattern>
+    <servlet-name>ShoppingController</servlet-name>
+    <url-pattern>/order</url-pattern>
   </servlet-mapping>
 </web-app>

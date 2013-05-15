@@ -29,7 +29,7 @@ category = (category == null) ? "" : category.trim();
 <h2>Results</h2>
 	<c:forEach var="product" items="${products}">
 	<div class="span4">
-		<c:out value="${product.name}" /><br>
+		<a href="order?id=<c:out value="${product.ID}" />"><c:out value="${product.name}" /></a><br>
 		<c:out value="${product.SKU}" /><br>
 		<c:out value="${product.price}" /><br>
 	</div>
