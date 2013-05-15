@@ -52,7 +52,7 @@ public class CategoryDao {
 
 			preparedStatement.setString(1, category.getName());
 			preparedStatement.setString(2, category.getDescription());
-			preparedStatement.setInt(3, category.getID());
+			preparedStatement.setInt(3, category.getId());
 			ret = preparedStatement.executeUpdate();
 			// Close the Statement
 			preparedStatement.close();

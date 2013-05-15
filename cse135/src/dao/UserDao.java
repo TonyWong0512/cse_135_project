@@ -41,7 +41,7 @@ public class UserDao {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				u = new User();
-				u.setID(rs.getInt("ID"));
+				u.setId(rs.getInt("id"));
 				u.setName(rs.getString("name"));
 				u.setRole(rs.getString("role"));
 				u.setAge(rs.getShort("age"));

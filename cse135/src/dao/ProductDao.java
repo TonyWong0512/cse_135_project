@@ -38,7 +38,7 @@ public class ProductDao {
 		int result = 0;
 		try {
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("delete from products where ID = ?");
+					.prepareStatement("delete from products where id = ?");
 			preparedStatement.setInt(1, id);
 			result = preparedStatement.executeUpdate();
 		} catch (SQLException e) {
@@ -68,7 +68,7 @@ public class ProductDao {
 		List<Product> result = new ArrayList<Product>();
 		try {
 			PreparedStatement ps = connection
-					.prepareStatement("select * from products, categories where categories.ID = ? and products.category = categories.ID");
+					.prepareStatement("select * from products, categories where categories.id = ? and products.category = categories.id");
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			toList(result, rs);
@@ -84,7 +84,7 @@ public class ProductDao {
 	private void toList(List<Product> result, ResultSet rs) throws SQLException {
 		while (rs.next()) {
 			Product p = new Product();
-			p.setID(rs.getInt("id"));
+			p.setId(rs.getInt("id"));
 			p.setName(rs.getString("name"));
 			p.setSKU(rs.getString("SKU"));
 			p.setPrice(rs.getBigDecimal("price"));
@@ -112,7 +112,7 @@ public class ProductDao {
 		List<Product> result = new ArrayList<Product>();
 		try {
 			PreparedStatement ps = connection
-					.prepareStatement("select * from products, categories where products.name = ? and categories.ID = ? and products.category = categories.ID");
+					.prepareStatement("select * from products, categories where products.name = ? and categories.id = ? and products.category = categories.id");
 			ps.setString(1, product);
 			ps.setInt(2, category);
 			ResultSet rs = ps.executeQuery();

@@ -12,7 +12,7 @@ category = (category == null) ? "" : category.trim();
 		<h2>Categories</h2>
 		<a href="browse?name=<%=name%>&category=">All products</a><br>
 		<c:forEach var="category" items="${categories}">
-			<a href="browse?name=<%=name%>&category=<c:out value="${category.ID}" />"><c:out value="${category.name}" /></a><br>
+			<a href="browse?name=<%=name%>&category=<c:out value="${category.id}" />"><c:out value="${category.name}" /></a><br>
 		</c:forEach>
 	</div>
 	
@@ -29,9 +29,9 @@ category = (category == null) ? "" : category.trim();
 <h2>Results</h2>
 	<c:forEach var="product" items="${products}">
 	<div class="span4">
-		<a href="order?id=<c:out value="${product.ID}" />"><c:out value="${product.name}" /></a><br>
+		<c:out value="${product.name}" /><br>
 		<c:out value="${product.SKU}" /><br>
-		<c:out value="${product.price}" /><br>
+		$<c:out value="${product.price}" /><br>
 	</div>
 	</c:forEach>
 </div>
