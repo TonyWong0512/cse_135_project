@@ -7,6 +7,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import model.User;
+
+import dao.UserDao;
 
 /**
  * Servlet implementation class Login
@@ -33,11 +38,23 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		String name = request.getParameter("name");
-		request.getSession().setAttribute("name", name);
-		PrintWriter out = response.getWriter();
-		out.print(request.getSession().getAttribute("name"));
+		if (name != null) {
+			UserDao dao = new UserDao();
+			User u = dao.getUser(name);
+			if (u != null) {
+				HttpSession session = request.getSession();
+				session.setAttribute("name", name);
+				if (u.getRole().contains("owner")) {
+					response.sendRedirect("product.jsp");
+				} else {
+					response.sendRedirect("browse.jsp");
+				}
+			} else {
+				PrintWriter out = response.getWriter();
+				out.print("invalid user");
+			}
+		}
 	}
 
 }

@@ -46,8 +46,6 @@ public class UserDao {
 				u.setRole(rs.getString("role"));
 				u.setAge(rs.getShort("age"));
 				u.setState(rs.getString("state"));
-				rs.close();
-				ps.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

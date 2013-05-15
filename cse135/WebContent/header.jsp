@@ -14,7 +14,7 @@
   <div class="navbar-inner">
     <a class="brand" href="#">Hello <%= (user != null) ? user : "" %></a>
     <ul class="nav">
-      <li class="active"><a href="#">Home</a></li>
+      <li><a href="index.jsp">Home</a></li>
       <li><a href="login.jsp">Login</a></li>
       <li><a href="signup.jsp">Sign up</a></li>
       <li><a href="browse.jsp">Browse</a></li>
