@@ -37,34 +37,7 @@ public class Product extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CategoryDao cdao = new CategoryDao();
-		request.setAttribute("categories", cdao.getAllCategories());
-		
-		int category;
-		try {
-			category = Integer.parseInt(request.getParameter("category"));
-		} catch (Exception e) {
-			category = -1;
-		}
-		String name = request.getParameter("name");
-		
-		ProductDao pdao = new ProductDao();
-		List<model.Product> products = null;
-
-		if (category == -1) {
-			if (name == null || name.trim() == "") {
-				products = pdao.getAllProducts();
-			} else {
-				products = pdao.getProductByName(name);
-			}
-		} else {
-			if (name == null || name.trim() == "") {
-				products = pdao.getProduct(category);
-			} else {
-				products = pdao.getProduct(name, category);
-			}
-		}
-		request.setAttribute("products", products);
+		Browse.loadProducts(request);
 		
 		getServletContext().getRequestDispatcher("/product.jsp").forward(request, response);
 	}

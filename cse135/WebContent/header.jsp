@@ -9,5 +9,16 @@
 </head>
 <body>
 <% String user = (String)pageContext.getSession().getAttribute("name"); %>
-Hello 
-<%= (user != null) ? user : "" %>
+
+<div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">Hello <%= (user != null) ? user : "" %></a>
+    <ul class="nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="login.jsp">Login</a></li>
+      <li><a href="signup.jsp">Sign up</a></li>
+      <li><a href="browse.jsp">Browse</a></li>
+      <li><a href="product.jsp">Products</a></li>
+    </ul>
+  </div>
+</div>
