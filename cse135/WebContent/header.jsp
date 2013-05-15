@@ -15,10 +15,11 @@
     <a class="brand" href="#">Hello <%= (user != null) ? user : "" %></a>
     <ul class="nav">
       <li><a href="index.jsp">Home</a></li>
-      <li><a href="login.jsp">Login</a></li>
-      <li><a href="signup.jsp">Sign up</a></li>
-      <li><a href="browse.jsp">Browse</a></li>
-      <li><a href="product.jsp">Products</a></li>
+      <li><a href="login">Login</a></li>
+      <li><a href="signup">Sign up</a></li>
+      <li><a href="browse">Browse</a></li>
+      <li><a href="product">Products</a></li>
+      <li><a href="category">Categories</a></li>
     </ul>
   </div>
 </div>
