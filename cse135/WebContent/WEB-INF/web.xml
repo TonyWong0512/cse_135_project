@@ -79,4 +79,14 @@
     <servlet-name>EditProduct</servlet-name>
     <url-pattern>/editproduct</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ShoppingController</display-name>
+    <servlet-name>ShoppingController</servlet-name>
+    <servlet-class>controller.ShoppingController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShoppingController</servlet-name>
+    <url-pattern>/order</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -1,24 +1,28 @@
+package controller;
 
 
 import java.io.IOException;
+import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.Product;
 import dao.ProductDao;
 
 /**
- * Servlet implementation class DeleteProduct
+ * Servlet implementation class ShoppingController
  */
-public class DeleteProduct extends HttpServlet {
+public class ShoppingController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	private static String SHOPPING_CART = "/cart.jsp";
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteProduct() {
+    public ShoppingController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -27,11 +31,13 @@ public class DeleteProduct extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("id"));
 		ProductDao dao = new ProductDao();
-		dao.deleteProduct(id);
-		response.getWriter().print("Product deleted");
-		System.out.println("deleting");
+		
+		List<Product> product = dao.getProductById(Integer.parseInt(request.getParameter("id")));
+		request.setAttribute("products", product);
+		
+		RequestDispatcher view = request.getRequestDispatcher(SHOPPING_CART);
+		view.forward(request, response);
 	}
 
 	/**
