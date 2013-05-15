@@ -13,12 +13,13 @@
 			</thead>
 			<tbody>
 				<tr>
-					<form action="/cse135/order" method="GET">
-						<input type="hidden" name="id" value="<c:out value="${product_to_buy.id}" />">
-						<input type="hidden" name="action" value="add_to_cart" />
+					<form action="/cse135/order" method="POST">
+						<input type="hidden" name="id"
+							value="<c:out value="${product_to_buy.id}" />"> <input
+							type="hidden" name="action" value="add_to_cart" />
 						<td><c:out value="${product_to_buy.name}" /></td>
-						<td><input type="number" style="width: 45px; padding: 1px"
-							value="0"></td>
+						<td><input type="number" name="quantity"
+							style="width: 45px; padding: 1px" value="0"></td>
 						<td><input type="submit" value="Add"></td>
 					</form>
 				</tr>
@@ -37,13 +38,14 @@
 				</tr>
 			</thead>
 			<tbody>
-			<c:forEach items="${cart}" var="product">
-				<tr>
-					<td><c:out value="${product.name}" /></td>
-					<td><c:out value="${product.id}" /></td>				
-				</tr>
+				<c:forEach items="${cart}" var="order">
+					<tr>
+						<td><c:out value="${order.product.name}" /></td>
+						<td><c:out value="${order.quantity}" /></td>
+					</tr>
+				</c:forEach>
 			</tbody>
-			</c:forEach>			
+
 		</table>
 	</c:if>
 	<c:if test="${cart == null}">

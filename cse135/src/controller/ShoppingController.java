@@ -11,22 +11,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.Order;
 import model.Product;
 import dao.ProductDao;
 
 /**
  * Servlet implementation class ShoppingController
  */
+
 public class ShoppingController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static String SHOPPING_CART = "/cart.jsp";
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public ShoppingController() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -38,28 +38,14 @@ public class ShoppingController extends HttpServlet {
 		ProductDao dao = new ProductDao();
 		HttpSession session = request.getSession();
 		// Get old cart
-		List<Product> cart = (List<Product>) session.getAttribute("shopping_cart");
+		List<Order> cart = ((ArrayList<Order>) session.getAttribute("shopping_cart"));
+
 		if (cart == null) {
-			cart = new ArrayList<Product>();
+			cart = new ArrayList<Order>();
 		}
 		String action = request.getParameter("action");
 		// Add to the cart
-		if (action != null && action.equals("add_to_cart")) {
-			try {
-				int id_product_buying = Integer.parseInt(request
-						.getParameter("id"));
-				// Get the product
-				Product product_buying = dao.getProduct(id_product_buying).get(
-						0);
-				// Add it to the cart
-				cart.add(product_buying);
-				session.setAttribute("shopping_cart", cart);
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
-		}
-		// Ask if want to add to cart
-		else if (action != null && action.equals("add")) {
+		if (action != null && action.equals("add")) {
 			try {
 				int id_product_to_buy = Integer.parseInt(request
 						.getParameter("id"));
@@ -82,7 +68,38 @@ public class ShoppingController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		ProductDao dao = new ProductDao();
+		HttpSession session = request.getSession();
+		// Get old cart
+		List<Order> cart = ((ArrayList<Order>) session.getAttribute("shopping_cart"));
+
+		if (cart == null) {
+			cart = new ArrayList<Order>();
+		}
+		String action = request.getParameter("action");
+		// Add to the cart
+		if (action != null && action.equals("add_to_cart")) {
+			try {
+				
+				int id_product_buying = Integer.parseInt(request
+						.getParameter("id"));
+				// Get the product
+				Product product_buying = dao.getProduct(id_product_buying).get(
+						0);
+				// Create the order
+				Order order = new Order(product_buying, Integer.parseInt(request
+						.getParameter("quantity")));
+				// Add it to the cart
+				cart.add(order);
+				session.setAttribute("shopping_cart", cart);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
+		request.setAttribute("cart", cart);
+
+		RequestDispatcher view = request.getRequestDispatcher(SHOPPING_CART);
+		view.forward(request, response);
 	}
 
 }
