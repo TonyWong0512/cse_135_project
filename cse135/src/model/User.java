@@ -1,7 +1,7 @@
 package model;
 
 public class User {
-	private int ID;
+	private int id;
 	private String name;
 	private String role;
 	private short age;
@@ -18,12 +18,12 @@ public class User {
 		this.state = state;
 	}
 
-	public int getID() {
-		return ID;
+	public int getId() {
+		return id;
 	}
 
-	public void setID(int iD) {
-		ID = iD;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getName() {

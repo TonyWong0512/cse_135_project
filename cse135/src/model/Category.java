@@ -6,7 +6,7 @@ public class Category {
 	private String name;
 	private String description;
 
-	public int getID() {
+	public int getId() {
 		return id;
 	}
 

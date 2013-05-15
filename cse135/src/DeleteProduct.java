@@ -27,7 +27,7 @@ public class DeleteProduct extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("ID"));
+		int id = Integer.parseInt(request.getParameter("id"));
 		ProductDao dao = new ProductDao();
 		dao.deleteProduct(id);
 		response.getWriter().print("Product deleted");

@@ -7,13 +7,13 @@ create table users (
 );
 
 create table categories (
-	ID serial primary key,
+	id serial primary key,
 	name text unique not null,
 	description text
 );
 
 create table products (
-	ID serial primary key,
+	id serial primary key,
 	name text not null,
 	sku text unique not null,
 	price decimal(10,4) not null,

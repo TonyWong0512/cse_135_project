@@ -12,7 +12,7 @@ category = (category == null) ? "" : category.trim();
 		<h2>Categories</h2>
 		<a href="product?name=<%=name%>&category=">All products</a><br>
 		<c:forEach var="category" items="${categories}">
-			<a href="product?name=<%=name%>&category=<c:out value="${category.ID}" />"><c:out value="${category.name}" /></a><br>
+			<a href="product?name=<%=name%>&category=<c:out value="${category.id}" />"><c:out value="${category.name}" /></a><br>
 		</c:forEach>
 	</div>
 	
@@ -32,7 +32,7 @@ category = (category == null) ? "" : category.trim();
 		<label>Category</label>
 		<select name="category">
 		<c:forEach var="category" items="${categories}">
-			<option value="<c:out value="${category.ID}" />"><c:out value="${category.name}" /></option>
+			<option value="<c:out value="${category.id}" />"><c:out value="${category.name}" /></option>
 		</c:forEach>
 		</select><br>
 		<input type="submit" value="Add product">
@@ -46,9 +46,9 @@ category = (category == null) ? "" : category.trim();
 	<div class="span4">
 		<c:out value="${product.name}" /><br>
 		<c:out value="${product.SKU}" /><br>
-		<c:out value="${product.price}" /><br>
-		<a href="editproduct?ID=<c:out value="${product.ID}" />">Edit</a>
-		<a href="deleteproduct?ID=<c:out value="${product.ID}" />">Delete</a>
+		$<c:out value="${product.price}" /><br>
+		<a href="editproduct?id=<c:out value="${product.id}" />">Edit</a>
+		<a href="deleteproduct?id=<c:out value="${product.id}" />">Delete</a>
 	</div>
 	</c:forEach>
 </div>
