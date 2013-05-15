@@ -57,7 +57,7 @@ public class Browse extends HttpServlet {
 			}
 		} else {
 			if (name == null || name.trim() == "") {
-				products = pdao.getProduct(category);
+				products = pdao.getProductByCategory(category);
 			} else {
 				products = pdao.getProduct(name, category);
 			}
