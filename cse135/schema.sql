@@ -17,18 +17,22 @@ create table products (
 	name text not null,
 	sku text unique not null,
 	price decimal(10,4) not null,
-	category integer references categories(ID)
-);
-
-create table ordered (
-	id serial primary key,
-	product integer references product(ID),
-	order integer references orders(ID)
+	category integer references categories(id)
 );
 
 create table orders (
-	id serial primary key
+	id serial primary key,
+	user_pk integer references users(id)
 );
 	
+
+create table ordered (
+	id serial primary key,
+	product integer references products(id),
+	quantity smallint not null,
+	order_pk integer references orders(id)
+);
+
+
 
 INSERT INTO categories (name, description) values ('Mary', 'Doe');
