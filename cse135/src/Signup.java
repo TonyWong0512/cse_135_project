@@ -50,9 +50,9 @@ public class Signup extends HttpServlet {
 		UserDao dao = new UserDao();
 		dao.addUser(u);
 		if (role.contains("owner")) {
-			response.sendRedirect("product.jsp");
+			response.sendRedirect("product");
 		} else {
-			response.sendRedirect("browse.jsp");
+			response.sendRedirect("browse");
 		}
 		HttpSession session = request.getSession();
 		session.setAttribute("name", name);
