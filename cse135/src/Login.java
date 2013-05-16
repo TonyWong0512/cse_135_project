@@ -46,8 +46,10 @@ public class Login extends HttpServlet {
 				HttpSession session = request.getSession();
 				session.setAttribute("name", name);
 				if (u.getRole().contains("owner")) {
+					session.setAttribute("role", "owner");
 					response.sendRedirect("product.jsp");
 				} else {
+					session.setAttribute("role", "customer");
 					response.sendRedirect("browse.jsp");
 				}
 			} else {
