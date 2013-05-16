@@ -30,15 +30,18 @@ public class EditProduct extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Browse.authOwner(request, response);
-		int id = Integer.parseInt(request.getParameter("id"));
-		ProductDao dao = new ProductDao();
-		Browse.loadProducts(request);
-		List<Product> products = dao.getProductById(id);
-		for (Product p : products) {
-			request.setAttribute("product", p);
+		if (!Browse.isOwner(request, response)) {
+			response.sendRedirect("browse");
+		} else {
+			int id = Integer.parseInt(request.getParameter("id"));
+			ProductDao dao = new ProductDao();
+			Browse.loadProducts(request);
+			List<Product> products = dao.getProductById(id);
+			for (Product p : products) {
+				request.setAttribute("product", p);
+			}
+			getServletContext().getRequestDispatcher("/editproduct.jsp").forward(request, response);
 		}
-		getServletContext().getRequestDispatcher("/editproduct.jsp").forward(request, response);
 	}
 
 	/**
@@ -46,7 +49,7 @@ public class EditProduct extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		if (Browse.authOwner(request, response)) {
+		if (Browse.isOwner(request, response)) {
 			response.sendRedirect("browse");
 		} else {
 			int id = Integer.parseInt(request.getParameter("id"));
