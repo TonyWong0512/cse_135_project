@@ -1,0 +1,1 @@
+We used the MVC pattern. Most of the logic is contained in the controllers package. The models represent the information stored in the DB. The views are the jsp files. We used JSTL because it is safer
