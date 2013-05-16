@@ -100,6 +100,7 @@ public class ShoppingController extends HttpServlet {
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			}
+			request.setAttribute("cart", cart);
 		}
 
 		if (action != null && action.equals("confirm_payment")) {
@@ -111,9 +112,11 @@ public class ShoppingController extends HttpServlet {
 			for (Order order : cart) {
 				odao.addProduct(order.getProduct(), order.getQuantity(), order_pk);
 			}
-		}
-
-		request.setAttribute("cart", cart);
+			
+			request.setAttribute("last_cart", cart);
+			// Clean the cart
+			session.removeAttribute("shopping_cart");
+		}		
 
 		RequestDispatcher view = request.getRequestDispatcher(forward);
 		view.forward(request, response);
