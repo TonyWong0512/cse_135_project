@@ -1,23 +1,13 @@
 
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.Category;
-import dao.CategoryDao;
 import dao.ProductDao;
-import util.DbUtil;
 
 /**
  * Servlet implementation class Product
@@ -37,23 +27,31 @@ public class Product extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Browse.authOwner(request, response);
 		Browse.loadProducts(request);
-		
 		getServletContext().getRequestDispatcher("/product.jsp").forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String name = request.getParameter("name");
-		String sku = request.getParameter("sku");
-		Double price = Double.parseDouble(request.getParameter("price"));
-		int category = Integer.parseInt(request.getParameter("category"));
-		ProductDao dao = new ProductDao();
-		model.Product p = new model.Product(name, sku, price, category);
-		dao.addProduct(p);
-		request.setAttribute("product", p);
-		getServletContext().getRequestDispatcher("/productconfirm.jsp").forward(request, response);
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		if (Browse.authOwner(request, response)) {
+			response.sendRedirect("browse");
+		} else {
+			Browse.authOwner(request, response);
+			String name = request.getParameter("name");
+			String sku = request.getParameter("sku");
+			Double price = Double.parseDouble(request.getParameter("price"));
+			int category = Integer.parseInt(request.getParameter("category"));
+			ProductDao dao = new ProductDao();
+			model.Product p = new model.Product(name, sku, price, category);
+			dao.addProduct(p);
+			request.setAttribute("product", p);
+			getServletContext().getRequestDispatcher("/productconfirm.jsp")
+					.forward(request, response);
+
+		}
 	}
 }

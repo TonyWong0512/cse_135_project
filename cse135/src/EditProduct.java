@@ -30,6 +30,7 @@ public class EditProduct extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Browse.authOwner(request, response);
 		int id = Integer.parseInt(request.getParameter("id"));
 		ProductDao dao = new ProductDao();
 		Browse.loadProducts(request);
@@ -43,15 +44,20 @@ public class EditProduct extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("id"));
-		String name = request.getParameter("name");
-		String sku = request.getParameter("sku");
-		Double price = Double.parseDouble(request.getParameter("price"));
-		int category = Integer.parseInt(request.getParameter("category"));
-		Product product = new Product(id, name, sku, price, category);
-		ProductDao dao = new ProductDao();
-		dao.updateProduct(id, product);
-		response.sendRedirect("/product");
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		if (Browse.authOwner(request, response)) {
+			response.sendRedirect("browse");
+		} else {
+			int id = Integer.parseInt(request.getParameter("id"));
+			String name = request.getParameter("name");
+			String sku = request.getParameter("sku");
+			Double price = Double.parseDouble(request.getParameter("price"));
+			int category = Integer.parseInt(request.getParameter("category"));
+			Product product = new Product(id, name, sku, price, category);
+			ProductDao dao = new ProductDao();
+			dao.updateProduct(id, product);
+			response.sendRedirect("/product");
 		}
+	}
 }
