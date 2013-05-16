@@ -23,11 +23,13 @@ create table products (
 create table ordered (
 	id serial primary key,
 	product integer references product(ID),
+	quantity smallint not null,
 	order integer references orders(ID)
 );
 
 create table orders (
-	id serial primary key
+	id serial primary key,
+	user integer references users(ID),
 );
 	
 
