@@ -22,6 +22,8 @@ import dao.ProductDao;
 public class ShoppingController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static String SHOPPING_CART = "/cart.jsp";
+	private static String CONFIRM_PAYMENT = "/confirm_payment.jsp";
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -38,11 +40,9 @@ public class ShoppingController extends HttpServlet {
 		ProductDao dao = new ProductDao();
 		HttpSession session = request.getSession();
 		// Get old cart
-		List<Order> cart = ((ArrayList<Order>) session.getAttribute("shopping_cart"));
+		List<Order> cart = ((ArrayList<Order>) session
+				.getAttribute("shopping_cart"));
 
-		if (cart == null) {
-			cart = new ArrayList<Order>();
-		}
 		String action = request.getParameter("action");
 		// Add to the cart
 		if (action != null && action.equals("add")) {
@@ -68,10 +68,12 @@ public class ShoppingController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		String forward = SHOPPING_CART;
 		ProductDao dao = new ProductDao();
 		HttpSession session = request.getSession();
 		// Get old cart
-		List<Order> cart = ((ArrayList<Order>) session.getAttribute("shopping_cart"));
+		List<Order> cart = ((ArrayList<Order>) session
+				.getAttribute("shopping_cart"));
 
 		if (cart == null) {
 			cart = new ArrayList<Order>();
@@ -80,15 +82,15 @@ public class ShoppingController extends HttpServlet {
 		// Add to the cart
 		if (action != null && action.equals("add_to_cart")) {
 			try {
-				
+
 				int id_product_buying = Integer.parseInt(request
 						.getParameter("id"));
 				// Get the product
 				Product product_buying = dao.getProduct(id_product_buying).get(
 						0);
 				// Create the order
-				Order order = new Order(product_buying, Integer.parseInt(request
-						.getParameter("quantity")));
+				Order order = new Order(product_buying,
+						Integer.parseInt(request.getParameter("quantity")));
 				// Add it to the cart
 				cart.add(order);
 				session.setAttribute("shopping_cart", cart);
@@ -96,9 +98,15 @@ public class ShoppingController extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+
+		if (action != null && action.equals("confirm_payment")) {
+			forward = CONFIRM_PAYMENT;
+			// Store the cart in the DB
+		}
+
 		request.setAttribute("cart", cart);
 
-		RequestDispatcher view = request.getRequestDispatcher(SHOPPING_CART);
+		RequestDispatcher view = request.getRequestDispatcher(forward);
 		view.forward(request, response);
 	}
 
