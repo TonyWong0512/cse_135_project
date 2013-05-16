@@ -77,8 +77,6 @@ public class Browse extends HttpServlet {
 			return true;
 		}
 		return false;
-		
-
 	}
 
 }

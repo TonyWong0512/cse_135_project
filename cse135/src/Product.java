@@ -27,9 +27,13 @@ public class Product extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Browse.authOwner(request, response);
-		Browse.loadProducts(request);
-		getServletContext().getRequestDispatcher("/product.jsp").forward(request, response);
+		if (Browse.authOwner(request, response)) {
+			response.sendRedirect("browse");
+		} else {
+			Browse.loadProducts(request);
+			getServletContext().getRequestDispatcher("/product.jsp").forward(
+					request, response);
+		}
 	}
 
 	/**
