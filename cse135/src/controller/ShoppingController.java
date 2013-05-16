@@ -50,7 +50,7 @@ public class ShoppingController extends HttpServlet {
 				int id_product_to_buy = Integer.parseInt(request
 						.getParameter("id"));
 				List<Product> product_to_buy = dao
-						.getProduct(id_product_to_buy);
+						.getProductById(id_product_to_buy);
 				request.setAttribute("product_to_buy", product_to_buy.get(0));
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
@@ -86,7 +86,7 @@ public class ShoppingController extends HttpServlet {
 				int id_product_buying = Integer.parseInt(request
 						.getParameter("id"));
 				// Get the product
-				Product product_buying = dao.getProduct(id_product_buying).get(
+				Product product_buying = dao.getProductById(id_product_buying).get(
 						0);
 				// Create the order
 				Order order = new Order(product_buying,
