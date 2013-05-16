@@ -46,6 +46,24 @@ public class ProductDao {
 		}
 		return result;
 	}
+	
+	public int updateProduct(int id, Product product) {
+		int result = 0;
+		try {
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("update products set name = ?, sku = ?, price = ?, category = ? where id = ?");
+			preparedStatement.setString(1, product.getName());
+			preparedStatement.setString(2, product.getSKU());
+			preparedStatement.setBigDecimal(3, product.getPrice());
+			preparedStatement.setInt(4, product.getCategory());
+			preparedStatement.setInt(5, product.getId());
+			System.out.println(preparedStatement.toString());
+			result = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	public List<Product> getProductByName(String name) {
 		List<Product> result = new ArrayList<Product>();
@@ -64,11 +82,28 @@ public class ProductDao {
 		return result;
 	}
 
-	public List<Product> getProduct(int id) {
+	public List<Product> getProductByCategory(int id) {
 		List<Product> result = new ArrayList<Product>();
 		try {
 			PreparedStatement ps = connection
 					.prepareStatement("select * from products, categories where categories.id = ? and products.category = categories.id");
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			toList(result, rs);
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	public List<Product> getProductById(int id) {
+		List<Product> result = new ArrayList<Product>();
+		try {
+			PreparedStatement ps = connection
+					.prepareStatement("select * from products where id = ?");
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			toList(result, rs);

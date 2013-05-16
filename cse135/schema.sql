@@ -20,4 +20,15 @@ create table products (
 	category integer references categories(ID)
 );
 
+create table ordered (
+	id serial primary key,
+	product integer references product(ID),
+	order integer references orders(ID)
+);
+
+create table orders (
+	id serial primary key
+);
+	
+
 INSERT INTO categories (name, description) values ('Mary', 'Doe');

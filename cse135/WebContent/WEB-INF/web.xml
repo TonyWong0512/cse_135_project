@@ -59,17 +59,27 @@
     <servlet-name>DeleteProduct</servlet-name>
     <url-pattern>/deleteproduct</url-pattern>
   </servlet-mapping>
-    <servlet>
-	<description></description>
-	<display-name>Browse</display-name>
-	<servlet-name>Browse</servlet-name>
-	<servlet-class>Browse</servlet-class>
-</servlet>
-	<servlet-mapping>
-		<servlet-name>Browse</servlet-name>
-		<url-pattern>/browse</url-pattern>
-	</servlet-mapping>
-	<servlet>
+  <servlet>
+    <description></description>
+    <display-name>Browse</display-name>
+    <servlet-name>Browse</servlet-name>
+    <servlet-class>Browse</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Browse</servlet-name>
+    <url-pattern>/browse</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EditProduct</display-name>
+    <servlet-name>EditProduct</servlet-name>
+    <servlet-class>EditProduct</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EditProduct</servlet-name>
+    <url-pattern>/editproduct</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <description></description>
     <display-name>ShoppingController</display-name>
     <servlet-name>ShoppingController</servlet-name>

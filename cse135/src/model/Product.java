@@ -9,13 +9,24 @@ public class Product {
 	private BigDecimal price;
 	private int category;
 	
-	public Product() {}
+	public Product(int id, String name, String sku, Double price, int category)
+	{
+		this.id = id;
+		this.name = name;
+		this.SKU = sku;
+		this.price = new BigDecimal(price);
+		this.category = category;
+	}
 	
 	public Product(String name, String SKU, double price, int category) {
 		this.name = name;
 		this.SKU = SKU;
 		this.price = new BigDecimal(price);
 		this.category = category;
+	}
+
+	public Product() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public int getId() {
