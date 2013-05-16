@@ -13,7 +13,10 @@ import javax.servlet.http.HttpSession;
 
 import model.Order;
 import model.Product;
+import model.User;
+import dao.OrderDao;
 import dao.ProductDao;
+import dao.UserDao;
 
 /**
  * Servlet implementation class ShoppingController
@@ -69,25 +72,25 @@ public class ShoppingController extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String forward = SHOPPING_CART;
-		ProductDao dao = new ProductDao();
+		ProductDao pdao = new ProductDao();
 		HttpSession session = request.getSession();
 		// Get old cart
 		List<Order> cart = ((ArrayList<Order>) session
 				.getAttribute("shopping_cart"));
-
+		String user_name = (String) session.getAttribute("name");
 		if (cart == null) {
 			cart = new ArrayList<Order>();
 		}
 		String action = request.getParameter("action");
 		// Add to the cart
+
 		if (action != null && action.equals("add_to_cart")) {
 			try {
-
 				int id_product_buying = Integer.parseInt(request
 						.getParameter("id"));
 				// Get the product
-				Product product_buying = dao.getProductById(id_product_buying).get(
-						0);
+				Product product_buying = pdao.getProductById(id_product_buying)
+						.get(0);
 				// Create the order
 				Order order = new Order(product_buying,
 						Integer.parseInt(request.getParameter("quantity")));
@@ -97,14 +100,23 @@ public class ShoppingController extends HttpServlet {
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			}
+			request.setAttribute("cart", cart);
 		}
 
 		if (action != null && action.equals("confirm_payment")) {
 			forward = CONFIRM_PAYMENT;
-			// Store the cart in the DB
-		}
-
-		request.setAttribute("cart", cart);
+			OrderDao odao = new OrderDao();
+			UserDao udao = new UserDao();
+			int order_pk = odao.createOrder(udao.getUser(user_name));
+			// Iterate over the cart
+			for (Order order : cart) {
+				odao.addProduct(order.getProduct(), order.getQuantity(), order_pk);
+			}
+			
+			request.setAttribute("last_cart", cart);
+			// Clean the cart
+			session.removeAttribute("shopping_cart");
+		}		
 
 		RequestDispatcher view = request.getRequestDispatcher(forward);
 		view.forward(request, response);
