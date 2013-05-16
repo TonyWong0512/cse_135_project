@@ -46,16 +46,21 @@ public class Signup extends HttpServlet {
 		String role = request.getParameter("role");
 		short age =  Short.parseShort(request.getParameter("age"));
 		String state = request.getParameter("state");
+		System.out.println(role);
 		User u = new User(name, role, age, state);
+		System.out.println(u.getRole());
 		UserDao dao = new UserDao();
-		dao.addUser(u);
-		if (role.contains("owner")) {
-			response.sendRedirect("product");
-		} else {
-			response.sendRedirect("browse");
-		}
 		HttpSession session = request.getSession();
 		session.setAttribute("name", name);
+		dao.addUser(u);
+		if (role.contains("owner")) {
+			session.setAttribute("role", "owner");
+			response.sendRedirect("product");
+		} else {
+			session.setAttribute("role", "customer");
+			response.sendRedirect("browse");
+		}
+
 	}
 
 }

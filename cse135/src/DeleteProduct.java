@@ -27,7 +27,7 @@ public class DeleteProduct extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (Browse.authOwner(request, response)) {
+		if (!Browse.isOwner(request, response)) {
 			response.sendRedirect("browse");
 		} else {
 			int id = Integer.parseInt(request.getParameter("id"));

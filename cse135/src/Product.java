@@ -27,7 +27,7 @@ public class Product extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (Browse.authOwner(request, response)) {
+		if (!Browse.isOwner(request, response)) {
 			response.sendRedirect("browse");
 		} else {
 			Browse.loadProducts(request);
@@ -41,10 +41,10 @@ public class Product extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		if (Browse.authOwner(request, response)) {
+		if (!Browse.isOwner(request, response)) {
 			response.sendRedirect("browse");
 		} else {
-			Browse.authOwner(request, response);
+			Browse.isOwner(request, response);
 			String name = request.getParameter("name");
 			String sku = request.getParameter("sku");
 			Double price = Double.parseDouble(request.getParameter("price"));

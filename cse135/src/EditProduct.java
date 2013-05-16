@@ -30,7 +30,7 @@ public class EditProduct extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (Browse.authOwner(request, response)) {
+		if (!Browse.isOwner(request, response)) {
 			response.sendRedirect("browse");
 		} else {
 			int id = Integer.parseInt(request.getParameter("id"));
@@ -49,7 +49,7 @@ public class EditProduct extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		if (Browse.authOwner(request, response)) {
+		if (Browse.isOwner(request, response)) {
 			response.sendRedirect("browse");
 		} else {
 			int id = Integer.parseInt(request.getParameter("id"));

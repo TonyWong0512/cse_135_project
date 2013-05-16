@@ -29,7 +29,7 @@ public class CategoryController extends HttpServlet {
 		super();
 		dao = new CategoryDao();
 	}
-	static public boolean authOwner(HttpServletRequest request,
+	static public boolean isOwner(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 			String role = (String)request.getSession().getAttribute("role");
 			if (role.contains("owner")) {
@@ -44,7 +44,7 @@ public class CategoryController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		if (authOwner(request, response)) {
+		if (!isOwner(request, response)) {
 			response.sendRedirect("browse");
 		} else {
 			String forward = LIST_CATEGORIES;
@@ -59,7 +59,7 @@ public class CategoryController extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String forward = LIST_CATEGORIES;
-		if (authOwner(request, response)) {
+		if (!isOwner(request, response)) {
 			response.sendRedirect("browse");
 		} else {
 			// Create the new object that will be added
