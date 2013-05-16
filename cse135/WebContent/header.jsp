@@ -11,6 +11,8 @@
 	<%
 		String user = (String) pageContext.getSession()
 				.getAttribute("name");
+		String role = (String) pageContext.getSession()
+				.getAttribute("role");
 	%>
 
 	<div class="navbar">
@@ -21,17 +23,22 @@
 				<%
 					if (user == null) {
 				%>
-					<li><a href="login">Login</a></li>
-					<li><a href="signup">Sign up</a></li>
+				<li><a href="login">Login</a></li>
+				<li><a href="signup">Sign up</a></li>
 				<%
 					}
 				%>
-				
+
 				<li><a href="browse">Browse</a></li>
-				<li><a href="product">Products</a></li>
-				<li><a href="category">Categories</a></li>
+
 				<%
 					if (user != null) {
+						if (role.contains("owner")) {
+				%>
+					<li><a href="product">Products</a></li>
+					<li><a href="category">Categories</a></li>
+				<%
+						}
 				%>
 					<li><a href="order">Cart</a></li>
 				<%

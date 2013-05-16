@@ -29,14 +29,21 @@ public class CategoryController extends HttpServlet {
 		super();
 		dao = new CategoryDao();
 	}
+	
 	static public boolean isOwner(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-			String role = (String)request.getSession().getAttribute("role");
+		if ((String) request.getSession().getAttribute("role") != null) {
+			String role = (String) request.getSession().getAttribute("role");
 			if (role.contains("owner")) {
+				System.out.println("user is owner");
 				return true;
 			}
+			System.out.println("user is customer");
+		} else {
 			return false;
 		}
+		return false;
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse

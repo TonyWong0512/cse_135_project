@@ -14,28 +14,31 @@ import dao.ProductDao;
  */
 public class Browse extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Browse() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public Browse() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		loadProducts(request);
-		
-		getServletContext().getRequestDispatcher("/browse.jsp").forward(request, response);
+
+		getServletContext().getRequestDispatcher("/browse.jsp").forward(
+				request, response);
 	}
 
 	public static void loadProducts(HttpServletRequest request) {
 		CategoryDao cdao = new CategoryDao();
 		request.setAttribute("categories", cdao.getAllCategories());
-		
+
 		int category;
 		try {
 			category = Integer.parseInt(request.getParameter("category"));
@@ -43,7 +46,7 @@ public class Browse extends HttpServlet {
 			category = -1;
 		}
 		String name = request.getParameter("name");
-		
+
 		ProductDao pdao = new ProductDao();
 		List<model.Product> products = null;
 
@@ -64,20 +67,26 @@ public class Browse extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
 
 	static public boolean isOwner(HttpServletRequest request,
-		HttpServletResponse response) throws IOException {
-		String role = (String)request.getSession().getAttribute("role");
-		if (role.contains("owner")) {
-			System.out.println("user is owner");
-			return true;
+			HttpServletResponse response) throws IOException {
+		if ((String) request.getSession().getAttribute("role") != null) {
+			String role = (String) request.getSession().getAttribute("role");
+			if (role.contains("owner")) {
+				System.out.println("user is owner");
+				return true;
+			}
+			System.out.println("user is customer");
+		} else {
+			return false;
 		}
-		System.out.println("user is customer");
 		return false;
 	}
 

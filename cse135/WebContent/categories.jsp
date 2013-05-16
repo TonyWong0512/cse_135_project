@@ -64,5 +64,4 @@
 			</td>
 		</tr>
 	</table>
-</body>
-</html>
+<%@include file="footer.jsp" %>
