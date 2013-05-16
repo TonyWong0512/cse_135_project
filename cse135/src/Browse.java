@@ -70,4 +70,15 @@ public class Browse extends HttpServlet {
 		doGet(request, response);
 	}
 
+	static public boolean authOwner(HttpServletRequest request,
+		HttpServletResponse response) throws IOException {
+		String role = (String)request.getSession().getAttribute("role");
+		if (role.contains("owner")) {
+			return true;
+		}
+		return false;
+		
+
+	}
+
 }
