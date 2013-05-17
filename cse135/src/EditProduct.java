@@ -49,7 +49,7 @@ public class EditProduct extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		if (Browse.isOwner(request, response)) {
+		if (!Browse.isOwner(request, response)) {
 			response.sendRedirect("browse");
 		} else {
 			int id = Integer.parseInt(request.getParameter("id"));
@@ -60,7 +60,7 @@ public class EditProduct extends HttpServlet {
 			Product product = new Product(id, name, sku, price, category);
 			ProductDao dao = new ProductDao();
 			dao.updateProduct(id, product);
-			response.sendRedirect("/product");
+			response.sendRedirect("product");
 		}
 	}
 }
