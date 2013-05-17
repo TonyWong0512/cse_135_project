@@ -10,7 +10,7 @@
 	<label>Category</label>
 	<select name="category">
 	<c:forEach var="category" items="${categories}">
-		<option value="<c:out value="${category.id}" />" <c:if test="${category.id} == ${product.getId()}">selected="selected"</c:if>><c:out value="${category.name}" />
+		<option value="<c:out value="${category.id}" />" <c:if test="${category.id} == ${product.id}">selected="selected"</c:if>><c:out value="${category.name}" />
 		</option>
 	</c:forEach>
 	</select><br>
