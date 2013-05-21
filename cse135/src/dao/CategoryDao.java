@@ -25,12 +25,17 @@ public class CategoryDao {
 	public int addCategory(Category category) {
 		int ret = 0;
 		try {
+			
+			connection.setAutoCommit(false);
 			PreparedStatement preparedStatement = connection
 					.prepareStatement("INSERT INTO categories (name, description) VALUES (?, ?)");
 
 			preparedStatement.setString(1, category.getName());
 			preparedStatement.setString(2, category.getDescription());
 			ret = preparedStatement.executeUpdate();
+			
+			connection.commit();
+			connection.setAutoCommit(true);
 			// Close the Statement
 			preparedStatement.close();
 		} catch (SQLException e) {
@@ -46,6 +51,7 @@ public class CategoryDao {
 	public int updateCategory(Category category) {
 		int ret = 0;
 		try {
+			connection.setAutoCommit(false);
 			PreparedStatement preparedStatement = connection
 					.prepareStatement("UPDATE categories SET name=?, description=?"
 							+ "WHERE id=?");
@@ -54,6 +60,9 @@ public class CategoryDao {
 			preparedStatement.setString(2, category.getDescription());
 			preparedStatement.setInt(3, category.getId());
 			ret = preparedStatement.executeUpdate();
+			
+			connection.commit();
+			connection.setAutoCommit(true);
 			// Close the Statement
 			preparedStatement.close();
 		} catch (SQLException e) {
@@ -80,6 +89,7 @@ public class CategoryDao {
 			}
 			rs.close();
 			// Close the Statement
+			
 			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -96,11 +106,16 @@ public class CategoryDao {
 	public int deleteCategory(int categoryId) {
 		int ret = 0;
 		try {
+			connection.setAutoCommit(false);
+
 			PreparedStatement preparedStatement = connection
 					.prepareStatement("DELETE FROM categories WHERE id=?");
 			// Parameters start with 1
 			preparedStatement.setInt(1, categoryId);
 			ret = preparedStatement.executeUpdate();
+			
+			connection.commit();
+			connection.setAutoCommit(true);
 			// Close the Statement
 			preparedStatement.close();
 		} catch (SQLException e) {
