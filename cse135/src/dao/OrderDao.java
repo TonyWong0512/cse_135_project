@@ -25,6 +25,8 @@ public class OrderDao {
 	public int createOrder(User user) {
 		int ret = 0;
 		try {
+			connection.setAutoCommit(false);
+			
 			PreparedStatement preparedStatement = connection
 					.prepareStatement("INSERT INTO orders (user_pk) VALUES (?) RETURNING id");
 
@@ -35,9 +37,10 @@ public class OrderDao {
 				ret = rs.getInt("id");
 			}
 			rs.close();
+			connection.commit();
+			connection.setAutoCommit(true);
 			// Close the Statement
 			preparedStatement.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -51,6 +54,8 @@ public class OrderDao {
 	public int addProduct(Product product, int quantity, int order_pk) {
 		int ret = 0;
 		try {
+			connection.setAutoCommit(false);
+
 			PreparedStatement preparedStatement = connection
 					.prepareStatement("INSERT INTO ordered (product, quantity, order_pk) VALUES (?, ?, ?)");
 
@@ -58,6 +63,8 @@ public class OrderDao {
 			preparedStatement.setInt(2, quantity);
 			preparedStatement.setInt(3, order_pk);
 			ret = preparedStatement.executeUpdate();
+			connection.commit();
+			connection.setAutoCommit(true);
 			// Close the Statement
 			preparedStatement.close();
 		} catch (SQLException e) {
