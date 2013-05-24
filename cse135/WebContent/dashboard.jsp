@@ -1,44 +1,66 @@
 <%@include file="header.jsp"%>
-<%
-	String name = request.getParameter("name");
-	String category = request.getParameter("category");
-	name = (name == null) ? "" : name.trim();
-	category = (category == null) ? "" : category.trim();
-%>
+
 <div class="container-fluid">
-	<h1>Products</h1>
-	<div class="row">
-		<div class="span3">
-			<h2>Categories</h2>
-			<a href="browse?name=<%=name%>&category=">All products</a><br>
-			<c:forEach var="category" items="${categories}">
-				<a
-					href="browse?name=<%=name%>&category=<c:out value="${category.id}" />"><c:out
-						value="${category.name}" /></a>
-				<br>
-			</c:forEach>
-		</div>
-
-		<form action="browse" method="get" class="span4">
-			<h2>Search</h2>
-			<label>Name</label> <input type="text" name="name" value="<%=name%>"></input><br>
-			<input type="hidden" name="category" value="<%=category%>"></input> <input
-				type="submit" value="Search">
-		</form>
-	</div>
-
-	<div class="row">
-		<h2>Results</h2>
-		<c:forEach var="product" items="${products}">
+	<div class="span12">
+		<div class="row">
 			<div class="span4">
-				<a href="order?action=add&id=<c:out value="${product.id}" />"><c:out
-						value="${product.name}" /></a><br>
-				<c:out value="${product.SKU}" />
-				<br> $
-				<c:out value="${product.price}" />
-				<br>
+				<form action="dashboard" method="get" class="form-inline">
+					<select name="rows">
+						<option value="c">Customers</option>
+						<option value="s">States</option>
+					</select>
+					<button type="submit" class="btn">Update</button>
+				</form>
 			</div>
-		</c:forEach>
+		</div>
+		<div class="row">
+				<form action="dashboard" method="get" class="form-inline">
+					<fieldset class="span12">
+						
+						<legend>Filter</legend>
+						<div class="span10">
+							<select name="age" class="span2">
+								<option value="-1">All ages</option>
+								<%
+									int i = 0;
+									while (i < 99) {
+								%>
+								<option value="<%=i%>"><%=i + "-" + (i + 9)%></option>
+								<%
+									i += 10;
+									}
+								%>
+							</select> <select name="state" class="span2">
+								<option value="-1">All states</option>
+								<c:forEach var="state" items="${states}">
+									<option value="<c:out value="${state}" />">
+										<c:out value="${state}" />
+									</option>
+								</c:forEach>
+							</select> <select name="category" class="span2">
+								<option value="-1">All categories</option>
+								<c:forEach var="category" items="${categories}">
+									<option value="<c:out value="${category.id}" />"
+										<c:if test="${category.id} == ${product.id}">selected="selected"</c:if>>
+										<c:out value="${category.name}" />
+									</option>
+								</c:forEach>
+							</select> <select name="quarter" class="span2">
+								<option value="w">Full Year</option>
+								<option value="w">Winter</option>
+								<option value="w">Spring</option>
+								<option value="w">Summer</option>
+								<option value="w">Fall</option>
+							</select>
+						</div>
+						<div class="span1">
+							<button type="submit" class="btn">Update</button>
+						</div>
+					</fieldset>
+				</form>
+		</div>
 	</div>
+
+
 </div>
 <%@include file="footer.jsp"%>
