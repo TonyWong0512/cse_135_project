@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.User;
+
 import dao.ProductDao;
 
 /**
@@ -27,7 +29,7 @@ public class DeleteProduct extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (!Browse.isOwner(request, response)) {
+		if (!User.isOwner((String) request.getSession().getAttribute("role"))) {
 			response.sendRedirect("browse");
 		} else {
 			int id = Integer.parseInt(request.getParameter("id"));

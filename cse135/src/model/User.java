@@ -1,5 +1,10 @@
 package model;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 public class User {
 	private int id;
 	private String name;
@@ -56,5 +61,18 @@ public class User {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+	
+	static public boolean isOwner(String role) throws IOException {
+		if ((String) role != null) {
+			if (role.contains("owner")) {
+				System.out.println("user is owner");
+				return true;
+			}
+			System.out.println("user is customer");
+		} else {
+			return false;
+		}
+		return false;
 	}
 }

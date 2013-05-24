@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.User;
+
 import dao.ProductDao;
 
 /**
@@ -27,7 +29,7 @@ public class Product extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (!Browse.isOwner(request, response)) {
+		if (!User.isOwner((String) request.getSession().getAttribute("role"))) {
 			response.sendRedirect("browse");
 		} else {
 			Browse.loadProducts(request);
@@ -41,10 +43,10 @@ public class Product extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		if (!Browse.isOwner(request, response)) {
+		if (!User.isOwner((String) request.getSession().getAttribute("role"))) {
 			response.sendRedirect("browse");
 		} else {
-			Browse.isOwner(request, response);
+			User.isOwner((String) request.getSession().getAttribute("role"));
 			String name = request.getParameter("name");
 			String sku = request.getParameter("sku");
 			Double price = Double.parseDouble(request.getParameter("price"));
