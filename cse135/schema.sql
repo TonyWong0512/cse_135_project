@@ -1,8 +1,7 @@
 DROP TABLE users CASCADE;
 DROP TABLE categories CASCADE;
 DROP TABLE products CASCADE;
-DROP TABLE orders CASCADE;
-DROP TABLE ordered CASCADE;
+DROP TABLE sales CASCADE;
 
 create table users (
 	id serial primary key,
@@ -22,7 +21,7 @@ create table products (
 	sku serial primary key,
 	name text unique not null,
 	price decimal(10,4) not null,
-	category integer references categories(id)
+	category_id integer references categories(id)
 );
 
 create table sales (
