@@ -1,14 +1,12 @@
 public class Customer
 {
     public String name;
-    public String role;
     public String state;
     public int age;
 
-    public Customer(String nname, String nstate, int nage, String role)
+    public Customer(String nname, String nstate, int nage)
     {
         name = nname;
-        role = nrole;
         state = nstate;
         age = nage;
     }
