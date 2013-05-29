@@ -28,6 +28,9 @@ BEGIN
 		season_of(NEW.month),
 		NEW.total_cost
 		WHERE NOT EXISTS (SELECT 1 FROM sales_by_state WHERE state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id));
+	INSERT INTO sales_by_customer (customer, season, sales)
+		SELECT NEW.customer_id, season_of(NEW.month), NEW.total_cost
+		WHERE NOT EXISTS (SELECT 1 FROM sales_by_customer WHERE customer=NEW.customer_id);
 	RETURN NEW;
 END$$ LANGUAGE 'plpgsql';
 
