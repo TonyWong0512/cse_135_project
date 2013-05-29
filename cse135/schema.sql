@@ -1,4 +1,4 @@
-DROP TYPE IF EXISTS season CASCADE;
+﻿DROP TYPE IF EXISTS season CASCADE;
 DROP TABLE IF EXISTS sales_by_customer;
 DROP TABLE IF EXISTS sales_by_state;
 DROP TRIGGER IF EXISTS update_sales on sales;
@@ -22,12 +22,12 @@ CREATE TABLE sales_by_state (
 
 CREATE OR REPLACE FUNCTION add_sales() RETURNS TRIGGER AS $$
 BEGIN
-	UPDATE sales_by_state SET state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id), season=season_of(NEW.month), sales=sales + NEW.total_cost WHERE state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id);
+	UPDATE sales_by_state SET state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id), season=season_of(NEW.month), sales=sales + NEW.total_cost WHERE state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id) and season=season_of(NEW.month);
 	INSERT INTO sales_by_state (state, season, sales)
 		SELECT (SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id),
 		season_of(NEW.month),
 		NEW.total_cost
-		WHERE NOT EXISTS (SELECT 1 FROM sales_by_state WHERE state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id));
+		WHERE NOT EXISTS (SELECT 1 FROM sales_by_state WHERE state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id) and season=season_of(NEW.month));
 	INSERT INTO sales_by_customer (customer, season, sales)
 		SELECT NEW.customer_id, season_of(NEW.month), NEW.total_cost
 		WHERE NOT EXISTS (SELECT 1 FROM sales_by_customer WHERE customer=NEW.customer_id);
