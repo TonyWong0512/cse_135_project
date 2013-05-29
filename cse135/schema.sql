@@ -18,13 +18,21 @@ CREATE TABLE sales_by_state (
 	season season NOT NULL,
 	sales bigint NOT NULL
 );
-/*
-CREATE OR REPLACE FUNCTION add_sales() RETURNS TRIGGER AS '
+
+
+CREATE OR REPLACE FUNCTION add_sales() RETURNS TRIGGER AS $$
 BEGIN
-	UPDATE sales_by_state SET 
-	INSERT INTO sales_by_state VALUES (NEW.state, `fall`, NEW.total_price);
-END' LANGUAGE 'plpgsql';
-*/
+	UPDATE sales_by_state SET state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id), season=season_of(NEW.month), sales=sales + NEW.total_cost WHERE state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id);
+	INSERT INTO sales_by_state (state, season, sales)
+		SELECT (SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id),
+		season_of(NEW.month),
+		NEW.total_cost
+		WHERE NOT EXISTS (SELECT 1 FROM sales_by_state WHERE state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id));
+	RETURN NEW;
+END$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER add_sales AFTER INSERT ON sales FOR EACH ROW EXECUTE PROCEDURE add_sales();
+
 
 CREATE OR REPLACE FUNCTION season_of(month int) RETURNS season AS $$
 BEGIN
@@ -34,5 +42,3 @@ BEGIN
 		WHEN month >= 9 AND month <= 11 THEN 'fall'
 		ELSE 'winter' END;
 END$$ LANGUAGE 'plpgsql';
-
-CREATE TRIGGER add_sales AFTER INSERT ON sales EXECUTE PROCEDURE add_sales();
