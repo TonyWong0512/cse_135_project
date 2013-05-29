@@ -8,7 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Category;
 import model.Product;
+import model.SalesByState;
 import util.DbUtil;
 
 public class SalesDao {
@@ -24,22 +26,31 @@ public class SalesDao {
 		}
 	}
 	
-	public ResultSet getSalesByState(String season, int offset) {
+	public List<SalesByState> getSalesByState(String season, int offset) {
 		ResultSet result = null;
+		List<SalesByState> sales = new ArrayList<SalesByState>();
 		try {
 			String seasonCondition = "";
-			if (season != null || season.trim() != "") {
+			if (season != null && season.trim() != "") {
 				seasonCondition = "WHERE season='" + season + "' ";
 			}
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT * FROM sales_by_state" + seasonCondition + "ORDER BY state LIMIT 10 OFFSET ?");
-			preparedStatement.setString(1, new Integer(offset).toString());
+					.prepareStatement("SELECT * FROM sales_by_state " + seasonCondition + "ORDER BY state LIMIT 10 OFFSET ?;");
+			preparedStatement.setInt(1, offset);
 			result = preparedStatement.executeQuery();
+			while (result.next()) {
+				SalesByState sale = new SalesByState();
+				sale.setSales(result.getInt("sales"));
+				sale.setSeason(result.getString("season"));
+				sale.setState(result.getString("state"));
+				sales.add(sale);
+			}
+			result.close();
 			connection.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return result;
+		return sales;
 	}
 /*
 	public int addProduct(Product product) {
