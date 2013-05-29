@@ -8,13 +8,13 @@ DROP TRIGGER IF EXISTS remove_sales on sales;
 CREATE TYPE season AS ENUM ('summer', 'fall', 'winter', 'spring');
 
 CREATE TABLE sales_by_customer (
-	customer int REFERENCES customers(id) UNIQUE NOT NULL,
+	customer int REFERENCES customers(id) NOT NULL,
 	season season NOT NULL,
 	sales bigint NOT NULL
 );
 
 CREATE TABLE sales_by_state (
-	state character(2) UNIQUE NOT NULL,
+	state character(2) NOT NULL,
 	season season NOT NULL,
 	sales bigint NOT NULL
 );
@@ -22,15 +22,16 @@ CREATE TABLE sales_by_state (
 
 CREATE OR REPLACE FUNCTION add_sales() RETURNS TRIGGER AS $$
 BEGIN
-	UPDATE sales_by_state SET state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id), season=season_of(NEW.month), sales=sales + NEW.total_cost WHERE state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id) and season=season_of(NEW.month);
+	UPDATE sales_by_state SET state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id), season=season_of(NEW.month), sales=sales + NEW.total_cost WHERE state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id) AND season=season_of(NEW.month);
 	INSERT INTO sales_by_state (state, season, sales)
 		SELECT (SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id),
 		season_of(NEW.month),
 		NEW.total_cost
 		WHERE NOT EXISTS (SELECT 1 FROM sales_by_state WHERE state=(SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id) and season=season_of(NEW.month));
+	UPDATE sales_by_customer SET customer=NEW.customer_id, season=season_of(NEW.month), sales=sales + NEW.total_cost WHERE customer=NEW.customer_id AND season=season_of(NEW.month);
 	INSERT INTO sales_by_customer (customer, season, sales)
 		SELECT NEW.customer_id, season_of(NEW.month), NEW.total_cost
-		WHERE NOT EXISTS (SELECT 1 FROM sales_by_customer WHERE customer=NEW.customer_id);
+		WHERE NOT EXISTS (SELECT 1 FROM sales_by_customer WHERE customer=NEW.customer_id AND season=season_of(NEW.month));
 	RETURN NEW;
 END$$ LANGUAGE 'plpgsql';
 
