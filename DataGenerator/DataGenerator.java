@@ -215,7 +215,7 @@ public class DataGenerator {
 		final int NUM_SALES_PER_PRODUCT_PER_CUSTOMER = 5;
 
 		PreparedStatement createSalesPS = conn
-				.prepareStatement("CREATE TABLE sales (id SERIAL PRIMARY KEY, product_id INT REFERENCES products (sku) NOT NULL, customer_id INT REFERENCES users (id) NOT NULL, day INT NOT NULL, month INT NOT NULL, quantity INT NOT NULL, total_cost INT NOT NULL);");
+				.prepareStatement("CREATE TABLE sales (id SERIAL PRIMARY KEY, product_id INT REFERENCES products (sku) NOT NULL, customer_id INT REFERENCES users (id) NOT NULL, quarter INT NOT NULL, quantity INT NOT NULL, total_cost INT NOT NULL);");
 		if (createSalesPS != null) {
 			createSalesPS.execute();
 			createSalesPS.close();
