@@ -80,6 +80,7 @@ public class DataGenerator {
 
 	private static void createCategoriesTable(Connection conn)
 			throws SQLException {
+			conn.createStatement().executeUpdate("DROP TABLE IF EXISTS Categories CASCADE");
 		PreparedStatement createCategoriesPS = conn
 				.prepareStatement("CREATE TABLE Categories (id SERIAL PRIMARY KEY, name TEXT NOT NULL, description TEXT);");
 		if (createCategoriesPS != null) {
@@ -104,6 +105,7 @@ public class DataGenerator {
 		final int NUM_PRODUCTS = 10000;
 		final int MAX_PRICE = 100000; // 1000 dollars
 
+		conn.createStatement().executeUpdate("DROP TABLE IF EXISTS Products CASCADE");
 		PreparedStatement createProductsPS = conn
 				.prepareStatement("CREATE TABLE Products (sku SERIAL PRIMARY KEY, name TEXT NOT NULL UNIQUE, cat_id INT REFERENCES Categories (id) NOT NULL, price INT NOT NULL);");
 		if (createProductsPS != null) {
@@ -153,6 +155,7 @@ public class DataGenerator {
 			Vector<String> firstNames, Vector<String> lastNames, int N)
 			throws SQLException {
 
+		conn.createStatement().executeUpdate("DROP TABLE IF EXISTS Customers CASCADE");
 		PreparedStatement createCustomersPS = conn
 				.prepareStatement("CREATE TABLE Customers (id SERIAL PRIMARY KEY, name TEXT NOT NULL, age INT NOT NULL, state CHARACTER(2) NOT NULL);");
 		if (createCustomersPS != null) {
@@ -205,19 +208,12 @@ public class DataGenerator {
 	}
 
 	// needs productsLength, needs customersLength
-	private static void createSalesTable(Connection conn, Object[] pArr, int N) throws SQLException {
+	private static void fillSalesTable(Connection conn, Object[] pArr, int N) throws SQLException {
 		final int MAX_QUANT = 10;
 		final int NUM_MONTHS = 12;
 		final int NUM_SALES = N * M * 100;
 		final int NUM_PRODUCTS_PER_CUSTOMER = 20;
 		final int NUM_SALES_PER_PRODUCT_PER_CUSTOMER = 5;
-
-		PreparedStatement createSalesPS = conn
-				.prepareStatement("CREATE TABLE Sales (id SERIAL PRIMARY KEY, product_id INT REFERENCES Products (sku) NOT NULL, customer_id INT REFERENCES Customers (id) NOT NULL, day INT NOT NULL, month INT NOT NULL, quantity INT NOT NULL, total_cost INT NOT NULL);");
-		if (createSalesPS != null) {
-			createSalesPS.execute();
-			createSalesPS.close();
-		}
 
 		int numQueries = 0;
 		PreparedStatement insertSalePS = conn
@@ -252,6 +248,18 @@ public class DataGenerator {
 			insertSalePS.close();
 		}
 		assert (numQueries == NUM_SALES);
+	}
+
+	private static void createSalesTable(Connection conn) throws SQLException {
+		conn.createStatement().executeUpdate("DROP TABLE IF EXISTS Sales CASCADE");
+		PreparedStatement createSalesPS = conn
+				.prepareStatement("CREATE TABLE Sales (id SERIAL PRIMARY KEY, product_id INT REFERENCES Products (sku) NOT NULL, customer_id INT REFERENCES Customers (id) NOT NULL, day INT NOT NULL, month INT NOT NULL, quantity INT NOT NULL, total_cost INT NOT NULL);");
+		if (createSalesPS != null) {
+			createSalesPS.execute();
+			createSalesPS.close();
+		}
+
+		Scanner reader = new Scanner(System.in);
 	}
 
 	// Math.random() * 5
@@ -375,7 +383,13 @@ public class DataGenerator {
 			assert (ps != null);
 
             conn.commit();
-			createSalesTable(conn, ps, n);
+    		createSalesTable(conn);
+    		conn.commit();
+    		System.out.println("Insert triggers now");
+    		reader.nextLine();
+			conn = DriverManager.getConnection(connString, username, password);
+			conn.setAutoCommit(false);
+			fillSalesTable(conn, ps, n);
 
             conn.commit();
 
