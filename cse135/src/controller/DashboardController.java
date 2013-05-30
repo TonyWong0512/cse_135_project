@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.CategoryDao;
 import dao.SalesDao;
 
 /**
@@ -56,7 +57,8 @@ public class DashboardController extends HttpServlet {
 		}
 		
 		request.setAttribute("products", dao.getProducts("", "", colsOffset));
-		
+		CategoryDao cdao = new CategoryDao();
+		request.setAttribute("categories", cdao.getAllCategories());
 		RequestDispatcher view = request.getRequestDispatcher("/dashboard.jsp");
 		view.forward(request, response);
 	}
