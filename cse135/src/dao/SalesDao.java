@@ -83,7 +83,7 @@ public class SalesDao {
 	}
 	
 	public List<SalesByCustomer> getSalesByCustomer(String season, int offset) {
-		ResultSet result = null;
+  		ResultSet result = null;
 		List<SalesByCustomer> sales = new ArrayList<SalesByCustomer>();
 		try {
 			String seasonCondition = "";
@@ -91,7 +91,7 @@ public class SalesDao {
 				seasonCondition = "WHERE season='" + season + "' ";
 			}
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT * FROM sales_by_product" + seasonCondition + "ORDER BY sales LIMIT 10 OFFSET ?;");
+					.prepareStatement("SELECT * FROM sales_by_product " + seasonCondition + "ORDER BY sales DESC LIMIT 10 OFFSET ?;");
 			preparedStatement.setInt(1, offset);
 			result = preparedStatement.executeQuery();
 			while (result.next()) {

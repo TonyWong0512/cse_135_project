@@ -81,9 +81,9 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${customers}" var="customer">
+							<c:forEach items="${customers}" var="sale">
 								<tr>
-									<td><c:out value="${customer.name}" /></td>
+									<td><c:out value="${sale.customer.name}" /></td>
 									<td>Apple</td>
 									<td>Chair</td>
 									<td>Table</td>
