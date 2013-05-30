@@ -75,4 +75,10 @@ public class User {
 		}
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", role=" + role
+				+ ", age=" + age + ", state=" + state + "]";
+	}
 }

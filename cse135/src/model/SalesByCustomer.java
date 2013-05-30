@@ -29,4 +29,12 @@ public class SalesByCustomer {
 		this.sales = sales;
 	}
 
+	@Override
+	public String toString() {
+		return "SalesByCustomer [customer=" + customer + ", season=" + season
+				+ ", sales=" + sales + "]";
+	}
+	
+	
+
 }
