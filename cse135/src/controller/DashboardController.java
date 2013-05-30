@@ -35,7 +35,7 @@ public class DashboardController extends HttpServlet {
 		String rows = request.getParameter("rows");
 		if (rows != null && rows.equals("s")) {
 			System.out.println("Generating states");
-			request.setAttribute("customers", dao.getSalesByState(null, 0));
+			request.setAttribute("states", dao.getSalesByState(null, 0));
 		} else {
 			// Generate customers
 			System.out.println("Generating customers");
