@@ -204,9 +204,10 @@ public class SalesDao {
 		return sales;
 	}
 
-	public SalesByProduct getSalesByCustomerAndProduct(User customer,
+	public int getSalesByCustomerAndProduct(User customer,
 			Product product) {
 		ResultSet result = null;
+		int sales = 0;
 		SalesByProduct sale = new SalesByProduct();
 		try {
 			PreparedStatement preparedStatement = connection
@@ -216,14 +217,14 @@ public class SalesDao {
 			result = preparedStatement.executeQuery();
 
 			while (result.next()) {
-				sale.setSales(result.getInt("sales"));
+				sales = result.getInt("sales");
 			}
 			result.close();
 			connection.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return sale;
+		return sales;
 
 	}
 
