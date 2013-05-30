@@ -27,13 +27,26 @@ public class SalesDao {
 		}
 	}
 
-	public List<SalesByState> getSalesByState(String season, int offset) {
+	public List<SalesByState> getSalesByState(String season, int offset,
+			String state) {
 		ResultSet result = null;
 		List<SalesByState> sales = new ArrayList<SalesByState>();
 		try {
 			String seasonCondition = "";
 			if (season != null && season.trim() != "") {
-				seasonCondition = "WHERE season='" + season + "' ";
+				// State and season
+				if (state != null && state.trim() != "") {
+					seasonCondition = "WHERE season='" + season
+							+ "' AND state='" + state.trim() + "' ";
+				} else {
+					// season
+					seasonCondition = "WHERE season='" + season + "' ";
+				}
+			} else {
+				// State
+				if (state != null && state.trim() != "") {
+					seasonCondition = "WHERE state='" + state.trim() + "' ";
+				}
 			}
 			PreparedStatement preparedStatement = connection
 					.prepareStatement("SELECT state, SUM(sales) AS sales FROM sales_by_state "
@@ -136,10 +149,10 @@ public class SalesDao {
 			while (result.next()) {
 				SalesByCustomer sale = new SalesByCustomer();
 				sale.setSales(result.getInt("sales"));
-				try{
+				try {
 					sale.setSeason(result.getString("season"));
-				}catch (Exception e){
-					
+				} catch (Exception e) {
+
 				}
 				UserDao udao = new UserDao();
 				sale.setCustomer(udao.getUser(result.getInt("customer")));
@@ -184,7 +197,8 @@ public class SalesDao {
 			String query = "SELECT sku, SUM(sales) AS sales FROM sales_by_product "
 					+ seasonCondition
 					+ "GROUP BY sku ORDER BY sales DESC LIMIT 10 OFFSET ?;";
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			PreparedStatement preparedStatement = connection
+					.prepareStatement(query);
 			System.out.println(preparedStatement.toString());
 			preparedStatement.setInt(1, offset);
 			result = preparedStatement.executeQuery();
@@ -207,8 +221,7 @@ public class SalesDao {
 		return sales;
 	}
 
-	public int getSalesByCustomerAndProduct(User customer,
-			Product product) {
+	public int getSalesByCustomerAndProduct(User customer, Product product) {
 		ResultSet result = null;
 		int sales = 0;
 		SalesByProduct sale = new SalesByProduct();
@@ -221,7 +234,8 @@ public class SalesDao {
 
 			while (result.next()) {
 				sales = result.getInt("sales");
-				System.out.println(customer.getName() + " " + product.getName() + " " + result.getInt("sales"));
+				System.out.println(customer.getName() + " " + product.getName()
+						+ " " + result.getInt("sales"));
 			}
 			result.close();
 			connection.commit();

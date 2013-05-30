@@ -84,27 +84,15 @@ public class DashboardController extends HttpServlet {
 
 		request.setAttribute("statesList", STATES);
 
-		List<SalesByProduct> products = dao.getProducts(state, quarter, colsOffset);
+		List<SalesByProduct> products = dao.getProducts(state, quarter,
+				colsOffset);
 		request.setAttribute("products", products);
 
 		if (rows != null && rows.equals("s")) {
 			System.out.println("Generating states");
-			List<SalesByState> salesByState = dao.getSalesByState(null,
-					rowsOffset);
+			List<SalesByState> salesByState = dao.getSalesByState(quarter,
+					rowsOffset, state);
 			request.setAttribute("states", salesByState);
-			// for (SalesByProduct product : products) {
-			// for (SalesByState sale : sales) {
-			// List<SalesByProduct> cell = dao.getSalesByProduct(
-			// product.getCustomer(), product.getState(), quarter,
-			// colsOffset);
-			// System.out.println(product.getCustomer()
-			// + product.getState());
-			// for (SalesByProduct sbp : cell) {
-			// System.out.println(sbp.getSales());
-			// }
-			// break;
-			// }
-			// }
 			HashMap<String, HashMap<Integer, Integer>> hmStates = new HashMap<String, HashMap<Integer, Integer>>();
 
 			for (SalesByState s : salesByState) {
@@ -134,12 +122,13 @@ public class DashboardController extends HttpServlet {
 				// There's one of this per customer
 				HashMap<Integer, Integer> hmProducts = new HashMap<Integer, Integer>();
 				for (SalesByProduct p : products) {
-					int cell = dao.getSalesByCustomerAndProduct(c.getCustomer(), p.getProduct());
+					int cell = dao.getSalesByCustomerAndProduct(
+							c.getCustomer(), p.getProduct());
 					hmProducts.put(p.getProduct().getId(), cell);
-					//System.out.println(hmCustomers);
+					// System.out.println(hmCustomers);
 				}
 				hmCustomers.put(c.getCustomer().getId(), hmProducts);
-				//System.out.println(hmCustomers);
+				// System.out.println(hmCustomers);
 			}
 
 			request.setAttribute("salesByCustomer", hmCustomers);
