@@ -83,7 +83,7 @@
 						<tbody>
 							<c:forEach items="${customers}" var="customer">
 								<tr>
-									<td>Cesar</td>
+									<td><c:out value="${customer.name}" /></td>
 									<td>Apple</td>
 									<td>Chair</td>
 									<td>Table</td>

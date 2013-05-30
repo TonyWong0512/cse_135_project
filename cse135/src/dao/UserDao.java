@@ -52,6 +52,27 @@ public class UserDao {
 		}
 		return u;
 	}
+
+	public User getUser(int pk) {
+		User u = null;
+		try {
+			PreparedStatement ps = connection
+					.prepareStatement("select * from users where id = ?");
+			ps.setInt(1, pk);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				u = new User();
+				u.setId(rs.getInt("id"));
+				u.setName(rs.getString("name"));
+				u.setRole(rs.getString("role"));
+				u.setAge(rs.getShort("age"));
+				u.setState(rs.getString("state"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return u;
+	}
 	
 	
 

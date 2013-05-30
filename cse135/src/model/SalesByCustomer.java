@@ -1,16 +1,16 @@
 package model;
 
 public class SalesByCustomer {
-	private int customer_pk;
+	private User customer;
 	private String season;
 	private long sales;
 
-	public int getCustomer() {
-		return customer_pk;
+	public User getCustomer() {
+		return customer;
 	}
 
-	public void setCustomer(int customer_pk) {
-		this.customer_pk = customer_pk;
+	public void setCustomer(User customer) {
+		this.customer = customer;
 	}
 
 	public String getSeason() {

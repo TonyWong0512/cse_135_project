@@ -10,6 +10,7 @@ import java.util.List;
 import model.SalesByCustomer;
 import model.SalesByProduct;
 import model.SalesByState;
+import model.User;
 import util.DbUtil;
 
 public class SalesDao {
@@ -97,7 +98,9 @@ public class SalesDao {
 				SalesByCustomer sale = new SalesByCustomer();
 				sale.setSales(result.getInt("sales"));
 				sale.setSeason(result.getString("season"));
-				sale.setCustomer(result.getInt("customer"));
+				
+				UserDao udao = new UserDao();				
+				sale.setCustomer(udao.getUser(result.getInt("customer")));
 				sales.add(sale);
 			}
 			result.close();
