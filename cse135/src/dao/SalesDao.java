@@ -56,23 +56,23 @@ public class SalesDao {
 		return sales;
 	}
 	
-	public List<SalesByProduct> getTopProducts(){
+	public List<SalesByProduct> getProducts(int offset){
 		List<SalesByProduct> products = new ArrayList<SalesByProduct>();
 		try {
-			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM sales_by_product ORDER BY sales DESC LIMIT 10 OFFSET 0;");
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("SELECT * FROM sales_by_product ORDER BY sales DESC LIMIT 10 OFFSET ?;");
+			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				SalesByProduct product = new SalesByProduct();
 				products.add(product);
 			}
 			rs.close();
 			// Close the Statement
-			
-			statement.close();
+			connection.commit();
+			preparedStatement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return products;
 	}
 /*
