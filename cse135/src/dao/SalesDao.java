@@ -128,16 +128,19 @@ public class SalesDao {
 				seasonCondition = "WHERE season='" + season + "' ";
 			}
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT customer, season, SUM(sales) as sales FROM sales_by_customer "
+					.prepareStatement("SELECT customer, SUM(sales) as sales FROM sales_by_customer "
 							+ seasonCondition
-							+ "GROUP BY season, customer, sales ORDER BY sales DESC LIMIT 10 OFFSET ?;");
+							+ "GROUP BY customer ORDER BY sales DESC LIMIT 10 OFFSET ?;");
 			preparedStatement.setInt(1, offset);
 			result = preparedStatement.executeQuery();
 			while (result.next()) {
 				SalesByCustomer sale = new SalesByCustomer();
 				sale.setSales(result.getInt("sales"));
-				sale.setSeason(result.getString("season"));
-
+				try{
+					sale.setSeason(result.getString("season"));
+				}catch (Exception e){
+					
+				}
 				UserDao udao = new UserDao();
 				sale.setCustomer(udao.getUser(result.getInt("customer")));
 				sales.add(sale);
@@ -170,7 +173,7 @@ public class SalesDao {
 				if (state != null && state.trim() != "") {
 					// state
 					seasonCondition = "WHERE state=" + state.trim() + " ";
-				} else{
+				} else {
 					// none
 					seasonCondition = " ";
 				}
@@ -185,10 +188,11 @@ public class SalesDao {
 			while (result.next()) {
 				SalesByProduct sale = new SalesByProduct();
 				sale.setSales(result.getInt("sales"));
-				
+
 				ProductDao pdao = new ProductDao();
 				String sku = result.getString("sku");
-				Product product = pdao.getProductByIdReturnProd(Integer.parseInt(sku));
+				Product product = pdao.getProductByIdReturnProd(Integer
+						.parseInt(sku));
 				sale.setProduct(product);
 				sales.add(sale);
 			}
@@ -199,8 +203,9 @@ public class SalesDao {
 		}
 		return sales;
 	}
-	
-	public SalesByProduct getSalesByCustomerAndProduct(User customer, Product product) {
+
+	public SalesByProduct getSalesByCustomerAndProduct(User customer,
+			Product product) {
 		ResultSet result = null;
 		SalesByProduct sale = new SalesByProduct();
 		try {
@@ -209,8 +214,8 @@ public class SalesDao {
 			preparedStatement.setInt(1, customer.getId());
 			preparedStatement.setInt(2, product.getId());
 			result = preparedStatement.executeQuery();
-			
-			while (result.next()) {				
+
+			while (result.next()) {
 				sale.setSales(result.getInt("sales"));
 			}
 			result.close();
@@ -219,9 +224,9 @@ public class SalesDao {
 			e.printStackTrace();
 		}
 		return sale;
-		
+
 	}
-	
+
 	/*
 	 * public int addProduct(Product product) { int result = 0; try {
 	 * PreparedStatement preparedStatement = connection .prepareStatement(
@@ -302,7 +307,5 @@ public class SalesDao {
 	 * ps.executeQuery(); toList(result, rs); rs.close(); ps.close(); } catch
 	 * (SQLException e) { e.printStackTrace(); } return result; }
 	 */
-
-	
 
 }
