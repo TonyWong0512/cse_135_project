@@ -99,16 +99,9 @@
 									<c:forEach items="${customers}" var="customer">
 										<tr>
 											<td><c:out value="${customer.customer.name}" /></td>
-											<td>Apple</td>
-											<td>Chair</td>
-											<td>Table</td>
-											<td>Table</td>
-											<td>Apple</td>
-											<td>Chair</td>
-											<td>Table</td>
-											<td>Table</td>
-											<td>Table</td>
-											<td>Table</td>
+											<c:forEach items="${salesByCustomer[customer.customer.id]}" var="salesByProduct">
+												<td>Apple</td>
+											</c:forEach>
 										</tr>
 									</c:forEach>
 								</c:otherwise>

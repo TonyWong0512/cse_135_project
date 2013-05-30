@@ -199,6 +199,29 @@ public class SalesDao {
 		}
 		return sales;
 	}
+	
+	public SalesByProduct getSalesByCustomerAndProduct(User customer, Product product) {
+		ResultSet result = null;
+		SalesByProduct sale = new SalesByProduct();
+		try {
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("SELECT SUM(sales) AS sales FROM sales_by_product WHERE customer = ? AND sku = ? GROUP BY sku;");
+			preparedStatement.setInt(1, customer.getId());
+			preparedStatement.setInt(2, product.getId());
+			result = preparedStatement.executeQuery();
+			
+			while (result.next()) {				
+				sale.setSales(result.getInt("sales"));
+			}
+			result.close();
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return sale;
+		
+	}
+	
 	/*
 	 * public int addProduct(Product product) { int result = 0; try {
 	 * PreparedStatement preparedStatement = connection .prepareStatement(
@@ -279,5 +302,7 @@ public class SalesDao {
 	 * ps.executeQuery(); toList(result, rs); rs.close(); ps.close(); } catch
 	 * (SQLException e) { e.printStackTrace(); } return result; }
 	 */
+
+	
 
 }
