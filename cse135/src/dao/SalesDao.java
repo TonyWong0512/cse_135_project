@@ -27,7 +27,15 @@ public class SalesDao {
 		}
 	}
 	
-	
+	public void getCustomersByProducts(String season, int offset){
+		// get top 10 products
+		List<SalesByState> salesByState = getSalesByState(season, offset);
+		// get top customers for offset
+		List<SalesByProduct> salesByProduct = getTopProducts();
+		// get spent money for each product
+		
+		
+	}
 	
 	public List<SalesByState> getSalesByState(String season, int offset) {
 		ResultSet result = null;
@@ -43,7 +51,7 @@ public class SalesDao {
 			result = preparedStatement.executeQuery();
 			while (result.next()) {
 				SalesByState sale = new SalesByState();
-				sale.setSales(result.getInt("sales"));
+				sale.setSales(result.getLong("sales"));
 				sale.setSeason(result.getString("season"));
 				sale.setState(result.getString("state"));
 				sales.add(sale);
@@ -56,13 +64,22 @@ public class SalesDao {
 		return sales;
 	}
 	
-	public List<SalesByProduct> getTopProducts(){
+	public List<SalesByProduct> getTopProducts(String season, int offset){
 		List<SalesByProduct> products = new ArrayList<SalesByProduct>();
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM sales_by_product ORDER BY sales DESC LIMIT 10 OFFSET 0;");
 			while (rs.next()) {
-				SalesByProduct product = new SalesByProduct();
+				SalesByProduct sale = new SalesByProduct();
+				
+				ProductDao pdao = new ProductDao();
+				Product product = pdao.getProductById(rs.getInt("sku")).get(0);
+				sale.setProduct(product);
+				
+				sale.setSales(rs.getLong("sales"));
+				sale.setState(rs.getString("state"));
+				
+				
 				products.add(product);
 			}
 			rs.close();
