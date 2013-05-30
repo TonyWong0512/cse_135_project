@@ -33,13 +33,19 @@ public class DashboardController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		SalesDao dao = new SalesDao();
 		String rows = request.getParameter("rows");
+		String roff = request.getParameter("roff");
+		System.out.println("Rows offset "+roff);
+		int rowsOffset = 0;
+		if(roff!=null){
+			rowsOffset = Integer.parseInt(roff);
+		}
 		if (rows != null && rows.equals("s")) {
-			System.out.println("Generating states");
-			request.setAttribute("states", dao.getSalesByState(null, 0));
+			System.out.println("Generating states");			
+			request.setAttribute("states", dao.getSalesByState(null, rowsOffset));
 		} else {
 			// Generate customers
 			System.out.println("Generating customers");
-			request.setAttribute("customers", dao.getSalesByCustomer(null, 0));
+			request.setAttribute("customers", dao.getSalesByCustomer(null, rowsOffset));
 		}
 		
 		RequestDispatcher view = request.getRequestDispatcher("/dashboard.jsp");
