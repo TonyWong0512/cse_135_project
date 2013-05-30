@@ -232,6 +232,27 @@ public class SalesDao {
 
 	}
 
+	public int getSalesByCustomerAndState(String state, Product product) {
+		ResultSet result = null;
+		int sale = 0;
+		try {
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("SELECT SUM(sales) AS sales FROM sales_by_product WHERE state = ? AND sku = ? GROUP BY sku;");
+			preparedStatement.setString(1, state);
+			preparedStatement.setInt(2, product.getId());
+			result = preparedStatement.executeQuery();
+
+			while (result.next()) {
+				sale = result.getInt("sales");
+			}
+			result.close();
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return sale;
+	}
+
 	/*
 	 * public int addProduct(Product product) { int result = 0; try {
 	 * PreparedStatement preparedStatement = connection .prepareStatement(
