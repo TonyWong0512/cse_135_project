@@ -10,6 +10,7 @@ import java.util.List;
 
 import model.Category;
 import model.Product;
+import model.SalesByProduct;
 import model.SalesByState;
 import util.DbUtil;
 
@@ -25,6 +26,8 @@ public class SalesDao {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	
 	public List<SalesByState> getSalesByState(String season, int offset) {
 		ResultSet result = null;
@@ -51,6 +54,26 @@ public class SalesDao {
 			e.printStackTrace();
 		}
 		return sales;
+	}
+	
+	public List<SalesByProduct> getTopProducts(){
+		List<SalesByProduct> products = new ArrayList<SalesByProduct>();
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT * FROM sales_by_product ORDER BY sales DESC LIMIT 10 OFFSET 0;");
+			while (rs.next()) {
+				SalesByProduct product = new SalesByProduct();
+				products.add(product);
+			}
+			rs.close();
+			// Close the Statement
+			
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return products;
 	}
 /*
 	public int addProduct(Product product) {
