@@ -56,6 +56,34 @@ public class SalesDao {
 		return sales;
 	}
 	
+	public List<SalesByProduct> getSalesByProduct(String season, int offset) {
+		ResultSet result = null;
+		List<SalesByProduct> sales = new ArrayList<SalesByProduct>();
+		try {
+			String seasonCondition = "";
+			if (season != null && season.trim() != "") {
+				seasonCondition = "WHERE season='" + season + "' ";
+			}
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("SELECT * FROM sales_by_product" + seasonCondition + "ORDER BY sales LIMIT 10 OFFSET ?;");
+			preparedStatement.setInt(1, offset);
+			result = preparedStatement.executeQuery();
+			while (result.next()) {
+				SalesByProduct sale = new SalesByProduct();
+				sale.setSales(result.getInt("sales"));
+				sale.setSeason(result.getString("season"));
+				sale.setState(result.getString("state"));
+				sales.add(sale);
+			}
+			result.close();
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return sales;
+	}
+	
+	/*
 	public List<SalesByProduct> getProducts(int offset){
 		List<SalesByProduct> products = new ArrayList<SalesByProduct>();
 		try {
@@ -75,7 +103,7 @@ public class SalesDao {
 		}
 		return products;
 	}
-/*
+	
 	public int addProduct(Product product) {
 		int result = 0;
 		try {
