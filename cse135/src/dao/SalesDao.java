@@ -157,32 +157,35 @@ public class SalesDao {
 			int offset) {
 		ResultSet result = null;
 		List<SalesByProduct> sales = new ArrayList<SalesByProduct>();
+		System.out.println(state + season);
 		try {
 			String seasonCondition = "";
 			if (season != null && season.trim() != "") {
 				if (state != null && state.trim() != "") {
 					// season and state
 					seasonCondition = "WHERE season='" + season
-							+ "' AND state=" + state.trim() + " ";
+							+ "' AND state='" + state.trim() + "' ";
 				} else {
 					// season
-					seasonCondition = "WHERE season='" + season + " ";
+					seasonCondition = "WHERE season='" + season + "' ";
 				}
 			} else {
 
 				if (state != null && state.trim() != "") {
 					// state
-					seasonCondition = "WHERE state=" + state.trim() + " ";
+					seasonCondition = "WHERE state='" + state.trim() + "' ";
 				} else {
 					// none
-					seasonCondition = " ";
+					seasonCondition = "";
 				}
 			}
+			System.out.println(seasonCondition);
 
-			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT sku, SUM(sales) AS sales FROM sales_by_product "
-							+ seasonCondition
-							+ "GROUP BY sku ORDER BY sales DESC LIMIT 10 OFFSET ?;");
+			String query = "SELECT sku, SUM(sales) AS sales FROM sales_by_product "
+					+ seasonCondition
+					+ "GROUP BY sku ORDER BY sales DESC LIMIT 10 OFFSET ?;";
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			System.out.println(preparedStatement.toString());
 			preparedStatement.setInt(1, offset);
 			result = preparedStatement.executeQuery();
 			while (result.next()) {
@@ -218,6 +221,7 @@ public class SalesDao {
 
 			while (result.next()) {
 				sales = result.getInt("sales");
+				System.out.println(customer.getName() + " " + product.getName() + " " + result.getInt("sales"));
 			}
 			result.close();
 			connection.commit();

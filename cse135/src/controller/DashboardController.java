@@ -84,7 +84,7 @@ public class DashboardController extends HttpServlet {
 
 		request.setAttribute("states", STATES);
 
-		List<SalesByProduct> products = dao.getProducts("", "", colsOffset);
+		List<SalesByProduct> products = dao.getProducts(state, quarter, colsOffset);
 		request.setAttribute("products", products);
 
 		if (rows != null && rows.equals("s")) {

@@ -51,10 +51,10 @@
 									</c:forEach>
 								</select> <select name="quarter" class="span2">
 									<option value="">Full Year</option>
-									<option value="w" ${quarter.equals("w") ? "selected" : ""}>Winter</option>
-									<option value="sp" ${quarter.equals("sp") ? "selected" : ""}>Spring</option>
-									<option value="s" ${quarter.equals("s") ? "selected" : ""}>Summer</option>
-									<option value="f" ${quarter.equals("f") ? "selected" : ""}>Fall</option>
+									<option value="winter" ${quarter.equals("winter") ? "selected" : ""}>Winter</option>
+									<option value="spring" ${quarter.equals("spring") ? "selected" : ""}>Spring</option>
+									<option value="summer" ${quarter.equals("summer") ? "selected" : ""}>Summer</option>
+									<option value="fall" ${quarter.equals("fall") ? "selected" : ""}>Fall</option>
 								</select>
 							</div>
 							<div class="span1">
