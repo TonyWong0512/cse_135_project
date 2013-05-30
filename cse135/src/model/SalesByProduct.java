@@ -5,6 +5,7 @@ public class SalesByProduct {
 	private long sales;
 	private User user;
 	private String state;
+	private String season;
 
 	public SalesByProduct() {
 
@@ -48,6 +49,14 @@ public class SalesByProduct {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public String getSeason() {
+		return season;
+	}
+
+	public void setSeason(String season) {
+		this.season = season;
 	}
 
 }

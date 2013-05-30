@@ -27,15 +27,7 @@ public class SalesDao {
 		}
 	}
 	
-	public void getCustomersByProducts(String season, int offset){
-		// get top 10 products
-		List<SalesByState> salesByState = getSalesByState(season, offset);
-		// get top customers for offset
-		List<SalesByProduct> salesByProduct = getTopProducts();
-		// get spent money for each product
-		
-		
-	}
+	
 	
 	public List<SalesByState> getSalesByState(String season, int offset) {
 		ResultSet result = null;
@@ -51,7 +43,7 @@ public class SalesDao {
 			result = preparedStatement.executeQuery();
 			while (result.next()) {
 				SalesByState sale = new SalesByState();
-				sale.setSales(result.getLong("sales"));
+				sale.setSales(result.getInt("sales"));
 				sale.setSeason(result.getString("season"));
 				sale.setState(result.getString("state"));
 				sales.add(sale);
@@ -64,35 +56,54 @@ public class SalesDao {
 		return sales;
 	}
 	
-	public List<SalesByProduct> getTopProducts(String season, int offset){
+	public List<SalesByProduct> getSalesByProduct(String season, int offset) {
+		ResultSet result = null;
+		List<SalesByProduct> sales = new ArrayList<SalesByProduct>();
+		try {
+			String seasonCondition = "";
+			if (season != null && season.trim() != "") {
+				seasonCondition = "WHERE season='" + season + "' ";
+			}
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("SELECT * FROM sales_by_product" + seasonCondition + "ORDER BY sales LIMIT 10 OFFSET ?;");
+			preparedStatement.setInt(1, offset);
+			result = preparedStatement.executeQuery();
+			while (result.next()) {
+				SalesByProduct sale = new SalesByProduct();
+				sale.setSales(result.getInt("sales"));
+				sale.setSeason(result.getString("season"));
+				sale.setState(result.getString("state"));
+				sales.add(sale);
+			}
+			result.close();
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return sales;
+	}
+	
+	/*
+	public List<SalesByProduct> getProducts(int offset){
 		List<SalesByProduct> products = new ArrayList<SalesByProduct>();
 		try {
-			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM sales_by_product ORDER BY sales DESC LIMIT 10 OFFSET 0;");
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("SELECT * FROM sales_by_product ORDER BY sales DESC LIMIT 10 OFFSET ?;");
+			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
-				SalesByProduct sale = new SalesByProduct();
-				
-				ProductDao pdao = new ProductDao();
-				Product product = pdao.getProductById(rs.getInt("sku")).get(0);
-				sale.setProduct(product);
-				
-				sale.setSales(rs.getLong("sales"));
-				sale.setState(rs.getString("state"));
-				
-				
+				SalesByProduct product = new SalesByProduct();
 				products.add(product);
 			}
 			rs.close();
 			// Close the Statement
-			
-			statement.close();
+			connection.commit();
+			preparedStatement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return products;
 	}
-/*
+	
 	public int addProduct(Product product) {
 		int result = 0;
 		try {
