@@ -128,9 +128,9 @@ public class SalesDao {
 				seasonCondition = "WHERE season='" + season + "' ";
 			}
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT * FROM sales_by_product "
+					.prepareStatement("SELECT customer, season, SUM(sales) as sales FROM sales_by_customer "
 							+ seasonCondition
-							+ "ORDER BY sales DESC LIMIT 10 OFFSET ?;");
+							+ "GROUP BY season, customer, sales ORDER BY sales DESC LIMIT 10 OFFSET ?;");
 			preparedStatement.setInt(1, offset);
 			result = preparedStatement.executeQuery();
 			while (result.next()) {
