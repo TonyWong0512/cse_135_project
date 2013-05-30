@@ -55,14 +55,42 @@ public class SalesDao {
 		return sales;
 	}
 	
-	public List<SalesByProduct> getSalesByProduct(String season, int offset) {
+	public List<SalesByProduct> getSalesByProduct(String customer, String state, String season, int offset) {
 		ResultSet result = null;
 		List<SalesByProduct> sales = new ArrayList<SalesByProduct>();
 		try {
 			String seasonCondition = "";
 			if (season != null && season.trim() != "") {
-				seasonCondition = "WHERE season='" + season + "' ";
+				if (customer != null && customer.trim() != "") {
+					if (state != null && state.trim() != "") {
+						// season, customer and state
+						seasonCondition = "WHERE season='" + season + "' AND state=" + state.trim() + " AND " + customer.trim() + " ";
+					} else {
+						// season and customer
+						seasonCondition = "WHERE season='" + season + "' AND " + customer.trim() + " ";
+					}
+				} else {
+					if (state != null && state.trim() != "") {
+						// season and state
+						seasonCondition = "WHERE season='" + season + "' AND state=" + state.trim() + " ";
+					} else {
+						// season
+						seasonCondition = "WHERE season='" + season + "' ";
+					}
+				}
+			} else if (customer != null && customer.trim() != "") {
+				if (state != null && state.trim() != "") {
+					// customer and state
+					seasonCondition = "WHERE customer=" + customer.trim() + " AND state=" + state.trim() + " ";
+				} else {
+					// customer
+					seasonCondition = "WHERE customer=" + customer.trim() + " ";
+				}
+			} else if (state != null && state.trim() != "") {
+				// state
+				seasonCondition = "WHERE state=" + state.trim() + " ";
 			}
+			
 			PreparedStatement preparedStatement = connection
 					.prepareStatement("SELECT * FROM sales_by_product" + seasonCondition + "ORDER BY sales LIMIT 10 OFFSET ?;");
 			preparedStatement.setInt(1, offset);
