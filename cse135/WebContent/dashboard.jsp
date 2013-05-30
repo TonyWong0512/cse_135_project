@@ -80,11 +80,11 @@
 										</option>
 									</c:forEach>
 								</select> <select name="quarter" class="span2">
-									<option value="w">Full Year</option>
-									<option value="w">Winter</option>
-									<option value="w">Spring</option>
-									<option value="w">Summer</option>
-									<option value="w">Fall</option>
+									<option value="">Full Year</option>
+									<option value="winter">Winter</option>
+									<option value="spring">Spring</option>
+									<option value="summer">Summer</option>
+									<option value="fall">Fall</option>
 								</select>
 							</div>
 							<div class="span1">
