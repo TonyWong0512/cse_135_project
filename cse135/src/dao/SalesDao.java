@@ -37,13 +37,12 @@ public class SalesDao {
 				seasonCondition = "WHERE season='" + season + "' ";
 			}
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT * FROM sales_by_state " + seasonCondition + "ORDER BY state LIMIT 10 OFFSET ?;");
+					.prepareStatement("SELECT state, SUM(sales) AS sales FROM sales_by_state " + seasonCondition + "GROUP BY state ORDER BY state LIMIT 10 OFFSET ?;");
 			preparedStatement.setInt(1, offset);
 			result = preparedStatement.executeQuery();
 			while (result.next()) {
 				SalesByState sale = new SalesByState();
 				sale.setSales(result.getInt("sales"));
-				sale.setSeason(result.getString("season"));
 				sale.setState(result.getString("state"));
 				sales.add(sale);
 			}
