@@ -2,12 +2,16 @@ package controller;
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import model.SalesByProduct;
+import model.SalesByState;
 
 import dao.SalesDao;
 
@@ -32,6 +36,7 @@ public class DashboardController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		SalesDao dao = new SalesDao();
+		String season = request.getParameter("quarter");
 		String rows = request.getParameter("rows");
 		String roff = request.getParameter("roff");
 		System.out.println("Rows offset "+roff);
@@ -45,17 +50,30 @@ public class DashboardController extends HttpServlet {
 		if(coff!=null){
 			colsOffset = Integer.parseInt(coff);
 		}
-				
+		
+		List<SalesByProduct> products = dao.getProducts("", "", colsOffset);
+		request.setAttribute("products", products);
+		
 		if (rows != null && rows.equals("s")) {
-			System.out.println("Generating states");			
-			request.setAttribute("states", dao.getSalesByState(null, rowsOffset));
+			System.out.println("Generating states");
+			List<SalesByState> sales = dao.getSalesByState(null, rowsOffset);
+			request.setAttribute("states", sales);
+			for (SalesByProduct product : products) {
+				for (SalesByState sale : sales) {
+					List<SalesByProduct> cell = dao.getSalesByProduct(product.getCustomer(), product.getState(), season, colsOffset);
+					System.out.println(product.getCustomer() + product.getState());
+					for (SalesByProduct sbp: cell) {
+						System.out.println(sbp.getSales());
+					}
+					break;
+				}
+			}
 		} else {
 			// Generate customers
 			System.out.println("Generating customers");
 			request.setAttribute("customers", dao.getSalesByCustomer(null, rowsOffset));
 		}
-		
-		request.setAttribute("products", dao.getProducts("", "", colsOffset));
+
 		
 		RequestDispatcher view = request.getRequestDispatcher("/dashboard.jsp");
 		view.forward(request, response);

@@ -3,7 +3,7 @@ package model;
 public class SalesByProduct {
 	private Product product;
 	private long sales;
-	private User user;
+	private String customer;
 	private String state;
 	private String season;
 
@@ -11,11 +11,11 @@ public class SalesByProduct {
 
 	}
 
-	public SalesByProduct(Product product, long sales, User user, String state) {
+	public SalesByProduct(Product product, long sales, String user, String state) {
 		super();
 		this.product = product;
 		this.sales = sales;
-		this.user = user;
+		this.customer = user;
 		this.state = state;
 	}
 
@@ -35,12 +35,12 @@ public class SalesByProduct {
 		this.sales = sales;
 	}
 
-	public User getUser() {
-		return user;
+	public String getCustomer() {
+		return customer;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setCustomer(String customer) {
+		this.customer = customer;
 	}
 
 	public String getState() {
@@ -62,7 +62,7 @@ public class SalesByProduct {
 	@Override
 	public String toString() {
 		return "SalesByProduct [product=" + product + ", sales=" + sales
-				+ ", user=" + user + ", state=" + state + ", season=" + season
+				+ ", user=" + customer + ", state=" + state + ", season=" + season
 				+ "]";
 	}
 	
