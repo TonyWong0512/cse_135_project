@@ -145,7 +145,6 @@ public class DashboardController extends HttpServlet {
 			request.setAttribute("salesByCustomer", hmCustomers);
 		}
 
-		request.setAttribute("products", dao.getProducts("", "", colsOffset));
 		CategoryDao cdao = new CategoryDao();
 		request.setAttribute("categories", cdao.getAllCategories());
 
