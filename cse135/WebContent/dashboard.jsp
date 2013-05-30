@@ -94,7 +94,7 @@
 										<tr>
 											<td><c:out value="${customer.customer.name} - ${customer.customer.id}" /></td>											
 											<c:forEach items="${products}" var="product">
-												<th><c:out value="${salesByCustomer[customer.customer.id][product.product.id].sales}" /></th>
+												<th><c:out value="${salesByCustomer[customer.customer.id][product.product.id]}" /></th>
 											</c:forEach>
 										</tr>
 									</c:forEach>
