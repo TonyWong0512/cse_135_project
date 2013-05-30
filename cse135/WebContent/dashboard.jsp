@@ -54,7 +54,7 @@
 							<legend>Filter</legend>
 							<div class="span10">
 								<select name="age" class="span2">
-									<option value="-1">All ages</option>
+									<option value="">All ages</option>
 									<%
 										int i = 0;
 										while (i < 99) {
@@ -65,14 +65,14 @@
 										}
 									%>
 								</select> <select name="state" class="span2">
-									<option value="-1">All states</option>
+									<option value="">All states</option>
 									<c:forEach var="state" items="${states}">
 										<option value="<c:out value="${state}" />">
 											<c:out value="${state}" />
 										</option>
 									</c:forEach>
 								</select> <select name="category" class="span2">
-									<option value="-1">All categories</option>
+									<option value="">All categories</option>
 									<c:forEach var="category" items="${categories}">
 										<option value="<c:out value="${category.id}" />"
 											<c:if test="${category.id} == ${product.id}">selected="selected"</c:if>>
@@ -80,11 +80,11 @@
 										</option>
 									</c:forEach>
 								</select> <select name="quarter" class="span2">
-									<option value="w">Full Year</option>
+									<option value="">Full Year</option>
 									<option value="w">Winter</option>
-									<option value="w">Spring</option>
-									<option value="w">Summer</option>
-									<option value="w">Fall</option>
+									<option value="sp">Spring</option>
+									<option value="s">Summer</option>
+									<option value="f">Fall</option>
 								</select>
 							</div>
 							<div class="span1">
@@ -100,16 +100,9 @@
 						<thead>
 							<tr>
 								<th>${states!=null ? "State" : "Customer"}</th>
-								<th>Product 1</th>
-								<th>Product 2</th>
-								<th>Product 3</th>
-								<th>Product 4</th>
-								<th>Product 5</th>
-								<th>Product 1</th>
-								<th>Product 2</th>
-								<th>Product 3</th>
-								<th>Product 4</th>
-								<th>Product 5</th>
+								<c:forEach items="${products}" var="product">
+									<th><c:out value="${product.product.name}" /></th>
+								</c:forEach>
 
 							</tr>
 						</thead>

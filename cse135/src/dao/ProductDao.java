@@ -1,5 +1,6 @@
 package dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -103,7 +104,7 @@ public class ProductDao {
 		List<Product> result = new ArrayList<Product>();
 		try {
 			PreparedStatement ps = connection
-					.prepareStatement("select * from products where id = ?");
+					.prepareStatement("select * from products where sku = ?");
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			toList(result, rs);
@@ -114,6 +115,27 @@ public class ProductDao {
 		}
 
 		return result;
+	}
+	
+public Product getProductByIdReturnProd(int id) {
+		
+		
+		Product p = null;
+		try {
+			PreparedStatement ps = connection
+					.prepareStatement("select * from products where sku = ?");
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				p = new Product();
+				p.setId(rs.getInt("sku"));
+				p.setName(rs.getString("name"));
+				p.setPrice(new BigDecimal(rs.getInt("price")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return p;
 	}
 
 	private void toList(List<Product> result, ResultSet rs) throws SQLException {

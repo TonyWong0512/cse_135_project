@@ -39,6 +39,13 @@ public class DashboardController extends HttpServlet {
 		if(roff!=null){
 			rowsOffset = Integer.parseInt(roff);
 		}
+		String coff = request.getParameter("coff");
+		System.out.println("Columns offset "+coff);
+		int colsOffset = 0;
+		if(coff!=null){
+			colsOffset = Integer.parseInt(coff);
+		}
+				
 		if (rows != null && rows.equals("s")) {
 			System.out.println("Generating states");			
 			request.setAttribute("states", dao.getSalesByState(null, rowsOffset));
@@ -47,6 +54,8 @@ public class DashboardController extends HttpServlet {
 			System.out.println("Generating customers");
 			request.setAttribute("customers", dao.getSalesByCustomer(null, rowsOffset));
 		}
+		
+		request.setAttribute("products", dao.getProducts("", "", colsOffset));
 		
 		RequestDispatcher view = request.getRequestDispatcher("/dashboard.jsp");
 		view.forward(request, response);

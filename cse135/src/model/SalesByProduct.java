@@ -59,4 +59,13 @@ public class SalesByProduct {
 		this.season = season;
 	}
 
+	@Override
+	public String toString() {
+		return "SalesByProduct [product=" + product + ", sales=" + sales
+				+ ", user=" + user + ", state=" + state + ", season=" + season
+				+ "]";
+	}
+	
+	
+
 }
