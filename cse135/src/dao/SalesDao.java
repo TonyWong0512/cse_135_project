@@ -98,10 +98,11 @@ public class SalesDao {
 			}
 
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT * FROM sales_by_product"
+					.prepareStatement("SELECT * FROM sales_by_product "
 							+ seasonCondition
 							+ "ORDER BY sales LIMIT 10 OFFSET ?;");
 			preparedStatement.setInt(1, offset);
+			System.out.println(preparedStatement.toString());
 			result = preparedStatement.executeQuery();
 			while (result.next()) {
 				SalesByProduct sale = new SalesByProduct();
