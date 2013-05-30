@@ -71,7 +71,7 @@
 							<tr>
 								<th>${salesByStates!=null ? "State" : "Customer"}</th>
 								<c:forEach items="${products}" var="product">
-									<th><c:out value="${product.product.name}" /></th>
+									<th><c:out value="${product.product.name} - ${product.product.id}" /></th>
 								</c:forEach>
 
 							</tr>
@@ -98,9 +98,9 @@
 								<c:otherwise>
 									<c:forEach items="${customers}" var="customer">
 										<tr>
-											<td><c:out value="${customer.customer.name}" /></td>
-											<c:forEach items="${salesByCustomer[customer.customer.id]}" var="salesByProduct">
-												<td>Apple</td>
+											<td><c:out value="${customer.customer.name} - ${customer.customer.id}" /></td>											
+											<c:forEach items="${products}" var="product">
+												<th><c:out value="${salesByCustomer[customer.customer.id][product.product.id].sales}" /></th>
 											</c:forEach>
 										</tr>
 									</c:forEach>
