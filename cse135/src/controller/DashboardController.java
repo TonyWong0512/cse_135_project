@@ -17,6 +17,13 @@ import dao.SalesDao;
  */
 public class DashboardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private final static String[] STATES = { "AL", "AK", "AZ", "AR", "CA",
+		"CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS",
+		"KY", "LA", "ME", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT",
+		"NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR",
+		"PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV",
+		"WI", "WY" };
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -49,7 +56,7 @@ public class DashboardController extends HttpServlet {
 				
 		if (rows != null && rows.equals("s")) {
 			System.out.println("Generating states");			
-			request.setAttribute("states", dao.getSalesByState(null, rowsOffset));
+			request.setAttribute("salesByStates", dao.getSalesByState(null, rowsOffset));
 		} else {
 			// Generate customers
 			System.out.println("Generating customers");
@@ -59,6 +66,32 @@ public class DashboardController extends HttpServlet {
 		request.setAttribute("products", dao.getProducts("", "", colsOffset));
 		CategoryDao cdao = new CategoryDao();
 		request.setAttribute("categories", cdao.getAllCategories());
+		
+		
+		String age = request.getParameter("age");
+		age = (age == null) ? "" : age.trim();
+		request.setAttribute("age", age);
+
+		String category = request.getParameter("category");
+		category = (category == null) ? "" : category.trim();
+		request.setAttribute("category", category);
+
+		String quarter = request.getParameter("quarter");
+		quarter = (quarter == null) ? "" : quarter.trim();
+		request.setAttribute("quarter", quarter);
+		
+		String state = request.getParameter("state");
+		state = (state == null) ? "" : state.trim();
+		request.setAttribute("state", state);
+		
+		rows = (rows == null) ? "" : rows.trim();
+		request.setAttribute("rows", rows);
+		
+		request.setAttribute("roff", rowsOffset);
+		request.setAttribute("coff", colsOffset);
+		
+		request.setAttribute("states", STATES);
+		
 		RequestDispatcher view = request.getRequestDispatcher("/dashboard.jsp");
 		view.forward(request, response);
 	}
