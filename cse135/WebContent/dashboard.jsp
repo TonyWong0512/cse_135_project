@@ -6,8 +6,8 @@
 			<div class="span4">
 				<form action="dashboard" method="get" class="form-inline">
 					<select name="rows">
-						<option value="c" ${salesByStates!=null ? "" : "selected"}>Customers</option>
-						<option value="s" ${salesByStates!=null ? "selected" : ""}>States</option>
+						<option value="c" ${states!=null ? "" : "selected"}>Customers</option>
+						<option value="s" ${states!=null ? "selected" : ""}>States</option>
 					</select>
 					<button type="submit" class="btn">Update</button>
 				</form>
@@ -22,7 +22,7 @@
 							<legend>Filter</legend>
 							<div class="span10">
 								<input type="hidden" name="rows"
-									${salesByStates!=null ? 'value="s"' : 'value="c"'}> <select
+									${states!=null ? 'value="s"' : 'value="c"'}> <select
 									name="age" class="span2">
 									<option value="">All ages</option>
 									<%
@@ -36,7 +36,7 @@
 									%>
 								</select> <select name="state" class="span2">
 									<option value="">All states</option>
-									<c:forEach var="state2" items="${states}">
+									<c:forEach var="state2" items="${statesList}">
 										<option value="<c:out value="${state2}" />"
 											${state.equals(state2) ? "selected" : ""}>
 											<c:out value="${state2}" />
@@ -69,7 +69,7 @@
 					<table class="table table-hover table-bordered">
 						<thead>
 							<tr>
-								<th>${salesByStates!=null ? "State" : "Customer"}</th>
+								<th>${states!=null ? "State" : "Customer"}</th>
 								<c:forEach items="${products}" var="product">
 									<th><c:out value="${product.product.name} - ${product.product.id}" /></th>
 								</c:forEach>
@@ -78,20 +78,14 @@
 						</thead>
 						<tbody>
 							<c:choose>
-								<c:when test="${salesByStates!=null}">
-									<c:forEach items="${salesByStates}" var="sale">
+								<c:when test="${states!=null}">
+									
+									<c:forEach items="${states}" var="state">
 										<tr>
-											<td><c:out value="${sale.state}" /></td>
-											<td>Apple</td>
-											<td>Chair</td>
-											<td>Table</td>
-											<td>Table</td>
-											<td>Apple</td>
-											<td>Chair</td>
-											<td>Table</td>
-											<td>Table</td>
-											<td>Table</td>
-											<td>Table</td>
+											<td><c:out value="${state.state}" /></td>									
+											<c:forEach items="${products}" var="product">
+												<th><c:out value="${salesByStates[state.state][product.product.id]}" /></th>
+											</c:forEach>
 										</tr>
 									</c:forEach>
 								</c:when>
