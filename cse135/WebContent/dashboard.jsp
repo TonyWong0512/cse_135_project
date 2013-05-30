@@ -1,5 +1,37 @@
 <%@include file="header.jsp"%>
+<%
+	String roffs = request.getParameter("roff");
+	roffs = (roffs == null) ? "" : roffs.trim();
+	int roff = 0;
+	try {
+		roff = Integer.parseInt(roffs);
+	} catch (Exception e) {
 
+	}
+	String coffs = request.getParameter("coff");
+	coffs = (coffs == null) ? "" : coffs.trim();
+	int coff = 0;
+	try {
+		coff = Integer.parseInt(coffs);
+	} catch (Exception e) {
+
+	}
+
+	String age = request.getParameter("age");
+	age = (age == null) ? "" : age.trim();
+
+	String state = request.getParameter("state");
+	state = (state == null) ? "" : state.trim();
+
+	String category = request.getParameter("category");
+	category = (category == null) ? "" : category.trim();
+
+	String quarter = request.getParameter("quarter");
+	quarter = (quarter == null) ? "" : quarter.trim();
+
+	String rows = request.getParameter("rows");
+	rows = (rows == null) ? "" : rows.trim();
+%>
 <div class="container-fluid">
 	<div class="span12">
 		<div class="row">
@@ -63,7 +95,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="span12">
+				<div class="span11">
 					<table class="table table-hover table-bordered">
 						<thead>
 							<tr>
@@ -78,6 +110,7 @@
 								<th>Product 3</th>
 								<th>Product 4</th>
 								<th>Product 5</th>
+
 							</tr>
 						</thead>
 						<tbody>
@@ -98,6 +131,18 @@
 							</c:forEach>
 						</tbody>
 					</table>
+				</div>
+				<div class="span1">
+					<a type="submit" class="btn"
+						href="?rows=<%=rows%>&roff=<%=roff %>&coff=<%=coff + 10%>&age=<%=age%>&state=<%=state%>&category=<%=category%>&quarter=<%=quarter%>">Next
+						10 columns</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span3">
+					<a type="submit" class="btn"
+						href="?rows=<%=rows%>&roff=<%=roff+10 %>&coff=<%=coff %>&age=<%=age%>&state=<%=state%>&category=<%=category%>&quarter=<%=quarter%>">Next
+						10 rows</a>
 
 				</div>
 			</div>

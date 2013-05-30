@@ -41,7 +41,7 @@ public class DashboardController extends HttpServlet {
 			System.out.println("Generating customers");
 			request.setAttribute("customers", dao.getSalesByCustomer(null, 0));
 		}
-
+		
 		RequestDispatcher view = request.getRequestDispatcher("/dashboard.jsp");
 		view.forward(request, response);
 	}
