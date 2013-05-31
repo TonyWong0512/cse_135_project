@@ -132,13 +132,25 @@ public class SalesDao {
 		return sales;
 	}
 
-	public List<SalesByCustomer> getSalesByCustomer(String season, int offset) {
+	public List<SalesByCustomer> getSalesByCustomer(String season, int offset, String state) {
 		ResultSet result = null;
 		List<SalesByCustomer> sales = new ArrayList<SalesByCustomer>();
 		try {
 			String seasonCondition = "";
 			if (season != null && season.trim() != "") {
-				seasonCondition = "WHERE season='" + season + "' ";
+				// State and season
+				if (state != null && state.trim() != "") {
+					seasonCondition = ", customers WHERE sales_by_customer.customer = customers.id AND sales_by_customer.season='" + season
+							+ "' AND customers.state='" + state.trim() + "' ";
+				} else {
+					// season
+					seasonCondition = "WHERE season='" + season + "' ";
+				}
+			} else {
+				// State
+				if (state != null && state.trim() != "") {
+					seasonCondition = ", customers WHERE sales_by_customer.customer = customers.id AND customers.state='" + state.trim() + "' ";
+				}
 			}
 			PreparedStatement preparedStatement = connection
 					.prepareStatement("SELECT customer, SUM(sales) as sales FROM sales_by_customer "
