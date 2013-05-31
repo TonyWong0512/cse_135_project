@@ -34,7 +34,7 @@ public class SalesDao {
 		try {
 			String condition = "WHERE customers.state = sales_by_state.state AND products.sku = sales_by_product.sku AND sales_by_customer.customer=sales_by_product.customer AND customers.id=sales_by_product.customer ";
 			if (state != null && state.trim() != "") {
-				condition += "AND state='" + state.trim() +  "' ";
+				condition += "AND customers.state='" + state.trim() +  "' ";
 			}
 			if (season != null && season.trim() != "") {
 				condition += "AND season='" + season.trim() +  "' ";
@@ -80,7 +80,7 @@ public class SalesDao {
 		try {
 			String condition = "WHERE products.sku = sales_by_product.sku AND sales_by_customer.customer=sales_by_product.customer AND customers.id=sales_by_product.customer ";
 			if (state != null && state.trim() != "") {
-				condition += "AND state='" + state.trim() +  "' ";
+				condition += "AND customers.state='" + state.trim() +  "' ";
 			}
 			if (season != null && season.trim() != "") {
 				condition += "AND season='" + season.trim() +  "' ";
@@ -128,7 +128,7 @@ public class SalesDao {
 		try {
 			String condition = " WHERE products.sku = sales_by_product.sku AND sales_by_product.customer = customers.id ";
 			if (state != null && state.trim() != "") {
-				condition += "AND state='" + state.trim() + "' ";
+				condition += "AND customers.state='" + state.trim() + "' ";
 			}
 			if (season != null && season.trim() != "") {
 				condition += "AND season='" + season.trim() + "' ";
