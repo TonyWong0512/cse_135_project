@@ -179,36 +179,26 @@ public class SalesDao {
 	}
 
 	public List<SalesByProduct> getProducts(String state, String season,
-			int offset) {
+			String category, int offset) {
 		ResultSet result = null;
 		List<SalesByProduct> sales = new ArrayList<SalesByProduct>();
 		System.out.println(state + season);
 		try {
-			String seasonCondition = "";
-			if (season != null && season.trim() != "") {
-				if (state != null && state.trim() != "") {
-					// season and state
-					seasonCondition = "WHERE season='" + season
-							+ "' AND state='" + state.trim() + "' ";
-				} else {
-					// season
-					seasonCondition = "WHERE season='" + season + "' ";
-				}
-			} else {
-
-				if (state != null && state.trim() != "") {
-					// state
-					seasonCondition = "WHERE state='" + state.trim() + "' ";
-				} else {
-					// none
-					seasonCondition = "";
-				}
+			String condition = " WHERE products.sku = sales_by_product.sku ";
+			if (state != null && state.trim() != "") {
+				condition += "AND state='" + state.trim() +  "' ";
 			}
-			System.out.println(seasonCondition);
+			if (season != null && season.trim() != "") {
+				condition += "AND season='" + season.trim() +  "' ";
+			}
+			if (category != null && category.trim() != "") {
+				condition += "AND cat_id='" + category.trim() + "' ";
+			}
+			System.out.println(condition);
 
-			String query = "SELECT sku, SUM(sales) AS sales FROM sales_by_product "
-					+ seasonCondition
-					+ "GROUP BY sku ORDER BY sales DESC LIMIT 10 OFFSET ?;";
+			String query = "SELECT products.sku, SUM(sales) AS sales FROM sales_by_product, products "
+					+ condition
+					+ "GROUP BY products.sku ORDER BY sales DESC LIMIT 10 OFFSET ?;";
 			PreparedStatement preparedStatement = connection
 					.prepareStatement(query);
 			System.out.println(preparedStatement.toString());
