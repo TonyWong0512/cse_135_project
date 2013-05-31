@@ -25,7 +25,8 @@ CREATE TABLE sales_by_product (
 	season season NOT NULL,
 	sales bigint NOT NULL,
 	customer int REFERENCES customers(id) NOT NULL,
-	sku int REFERENCES products(sku) NOT NULL
+	sku int REFERENCES products(sku) NOT NULL,
+	num_sales int NOT NULL
 );
 
 CREATE OR REPLACE FUNCTION add_sales() RETURNS TRIGGER AS $$
@@ -40,9 +41,9 @@ BEGIN
 	INSERT INTO sales_by_customer (customer, season, sales)
 		SELECT NEW.customer_id, season_of(NEW.month), NEW.total_cost
 		WHERE NOT EXISTS (SELECT 1 FROM sales_by_customer WHERE customer=NEW.customer_id AND season=season_of(NEW.month));
-	UPDATE sales_by_product SET sku=NEW.product_id, customer=NEW.customer_id, season=season_of(NEW.month), sales=sales + NEW.total_cost WHERE sku=NEW.product_id AND season=season_of(NEW.month);
-	INSERT INTO sales_by_product (state, season, sales, customer, sku)
-		SELECT (SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id), season_of(NEW.month), NEW.total_cost, NEW.customer_id, NEW.product_id 
+	UPDATE sales_by_product SET sku=NEW.product_id, customer=NEW.customer_id, season=season_of(NEW.month), sales=sales + NEW.total_cost, num_sales=num_sales + 1 WHERE sku=NEW.product_id AND season=season_of(NEW.month);
+	INSERT INTO sales_by_product (state, season, sales, customer, sku, num_sales)
+		SELECT (SELECT state FROM sales, customers WHERE customers.id=NEW.customer_id AND sales.id=NEW.id), season_of(NEW.month), NEW.total_cost, NEW.customer_id, NEW.product_id , 1
 		WHERE NOT EXISTS (SELECT 1 FROM sales_by_product WHERE sku=NEW.product_id AND season=season_of(NEW.month));
 	RETURN NEW;
 END$$ LANGUAGE 'plpgsql';
