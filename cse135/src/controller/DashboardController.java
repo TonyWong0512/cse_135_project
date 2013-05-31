@@ -115,14 +115,14 @@ public class DashboardController extends HttpServlet {
 			List<SalesByCustomer> salesByCustomer = dao.getSalesByCustomer(
 					quarter, rowsOffset, state, category, age);
 			request.setAttribute("customers", salesByCustomer);
-			HashMap<Integer, HashMap<Integer, Integer>> hmCustomers = new HashMap<Integer, HashMap<Integer, Integer>>();
+			HashMap<Integer, HashMap<Integer, Long>> hmCustomers = new HashMap<Integer, HashMap<Integer, Long>>();
 
 			for (SalesByCustomer c : salesByCustomer) {
 				// This hashmap contains all the sales for each product.
 				// There's one of this per customer
-				HashMap<Integer, Integer> hmProducts = new HashMap<Integer, Integer>();
+				HashMap<Integer, Long> hmProducts = new HashMap<Integer, Long>();
 				for (SalesByProduct p : products) {
-					int cell = dao.getSalesByCustomerAndProduct(
+					long cell = dao.getSalesByCustomerAndProduct(
 							c.getCustomer(), p.getProduct(), quarter);
 					hmProducts.put(p.getProduct().getId(), cell);
 					// System.out.println(hmCustomers);

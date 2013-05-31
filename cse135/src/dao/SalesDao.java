@@ -32,31 +32,30 @@ public class SalesDao {
 		ResultSet result = null;
 		List<SalesByState> sales = new ArrayList<SalesByState>();
 		try {
-			String seasonCondition = "";
-			if (season != null && season.trim() != "") {
-				// State and season
-				if (state != null && state.trim() != "") {
-					seasonCondition = "WHERE season='" + season
-							+ "' AND state='" + state.trim() + "' ";
-				} else {
-					// season
-					seasonCondition = "WHERE season='" + season + "' ";
-				}
-			} else {
-				// State
-				if (state != null && state.trim() != "") {
-					seasonCondition = "WHERE state='" + state.trim() + "' ";
-				}
+			String condition = "WHERE customers.state = sales_by_state.state AND products.sku = sales_by_product.sku AND sales_by_customer.customer=sales_by_product.customer AND customers.id=sales_by_product.customer ";
+			if (state != null && state.trim() != "") {
+				condition += "AND state='" + state.trim() +  "' ";
 			}
+			if (season != null && season.trim() != "") {
+				condition += "AND season='" + season.trim() +  "' ";
+			}
+			if (category != null && category.trim() != "") {
+				condition += "AND cat_id='" + category.trim() + "' ";
+			}
+			if (age != null && age.trim() != "") {
+				condition += "AND age BETWEEN " + toRange(age) + " ";
+			}
+			
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT state, SUM(sales) AS sales FROM sales_by_state "
-							+ seasonCondition
-							+ "GROUP BY state ORDER BY state LIMIT 10 OFFSET ?;");
+					.prepareStatement("SELECT sales_by_state.state, SUM(sales_by_state.sales) AS sales FROM sales_by_state, sales_by_customer, sales_by_product, products, customers "
+							+ condition
+							+ "GROUP BY sales_by_state.state ORDER BY sales_by_state.state LIMIT 10 OFFSET ?;");
+			System.out.println(preparedStatement.toString());
 			preparedStatement.setInt(1, offset);
 			result = preparedStatement.executeQuery();
 			while (result.next()) {
 				SalesByState sale = new SalesByState();
-				sale.setSales(result.getInt("sales"));
+				sale.setSales(result.getLong("sales"));
 				sale.setState(result.getString("state"));
 				sales.add(sale);
 			}
@@ -152,7 +151,7 @@ public class SalesDao {
 			result = preparedStatement.executeQuery();
 			while (result.next()) {
 				SalesByProduct sale = new SalesByProduct();
-				sale.setSales(result.getInt("sales"));
+				sale.setSales(result.getLong("sales"));
 
 				ProductDao pdao = new ProductDao();
 				String sku = result.getString("sku");
@@ -169,10 +168,10 @@ public class SalesDao {
 		return sales;
 	}
 
-	public int getSalesByCustomerAndProduct(User customer, Product product,
+	public long getSalesByCustomerAndProduct(User customer, Product product,
 			String season) {
 		ResultSet result = null;
-		int sales = 0;
+		long sales = 0;
 		SalesByProduct sale = new SalesByProduct();
 		try {
 			String condition = "";
@@ -188,7 +187,7 @@ public class SalesDao {
 			result = preparedStatement.executeQuery();
 
 			while (result.next()) {
-				sales = result.getInt("sales");
+				sales = result.getLong("sales");
 				System.out.println(customer.getName() + " " + product.getName()
 						+ " " + result.getInt("sales"));
 			}
