@@ -68,99 +68,32 @@ public class SalesDao {
 		return sales;
 	}
 
-	public List<SalesByProduct> getSalesByProduct(String customer,
-			String state, String season, int offset) {
-		ResultSet result = null;
-		List<SalesByProduct> sales = new ArrayList<SalesByProduct>();
-		try {
-			String seasonCondition = "";
-			if (season != null && season.trim() != "") {
-				if (customer != null && customer.trim() != "") {
-					if (state != null && state.trim() != "") {
-						// season, customer and state
-						seasonCondition = "WHERE season='" + season
-								+ "' AND state=" + state.trim() + " AND "
-								+ customer.trim() + " ";
-					} else {
-						// season and customer
-						seasonCondition = "WHERE season='" + season + "' AND "
-								+ customer.trim() + " ";
-					}
-				} else {
-					if (state != null && state.trim() != "") {
-						// season and state
-						seasonCondition = "WHERE season='" + season
-								+ "' AND state=" + state.trim() + " ";
-					} else {
-						// season
-						seasonCondition = "WHERE season='" + season + "' ";
-					}
-				}
-			} else if (customer != null && customer.trim() != "") {
-				if (state != null && state.trim() != "") {
-					// customer and state
-					seasonCondition = "WHERE customer=" + customer.trim()
-							+ " AND state=" + state.trim() + " ";
-				} else {
-					// customer
-					seasonCondition = "WHERE customer=" + customer.trim() + " ";
-				}
-			} else if (state != null && state.trim() != "") {
-				// state
-				seasonCondition = "WHERE state=" + state.trim() + " ";
-			}
-
-			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT * FROM sales_by_product "
-							+ seasonCondition
-							+ "ORDER BY sales LIMIT 10 OFFSET ?;");
-			preparedStatement.setInt(1, offset);
-			System.out.println(preparedStatement.toString());
-			result = preparedStatement.executeQuery();
-			while (result.next()) {
-				SalesByProduct sale = new SalesByProduct();
-				sale.setSales(result.getInt("sales"));
-				sale.setSeason(result.getString("season"));
-				sale.setState(result.getString("state"));
-				sales.add(sale);
-			}
-			result.close();
-			connection.commit();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return sales;
-	}
-
-	public List<SalesByCustomer> getSalesByCustomer(String season, int offset, String state) {
+	public List<SalesByCustomer> getSalesByCustomer(String season, int offset, String state, String category) {
 		ResultSet result = null;
 		List<SalesByCustomer> sales = new ArrayList<SalesByCustomer>();
 		try {
-			String seasonCondition = "";
-			if (season != null && season.trim() != "") {
-				// State and season
-				if (state != null && state.trim() != "") {
-					seasonCondition = ", customers WHERE sales_by_customer.customer = customers.id AND sales_by_customer.season='" + season
-							+ "' AND customers.state='" + state.trim() + "' ";
-				} else {
-					// season
-					seasonCondition = "WHERE season='" + season + "' ";
-				}
-			} else {
-				// State
-				if (state != null && state.trim() != "") {
-					seasonCondition = ", customers WHERE sales_by_customer.customer = customers.id AND customers.state='" + state.trim() + "' ";
-				}
+			String condition = "WHERE products.sku = sales_by_product.sku AND sales_by_customer.customer=sales_by_product.customer ";
+			if (state != null && state.trim() != "") {
+				condition += "AND state='" + state.trim() +  "' ";
 			}
+			if (season != null && season.trim() != "") {
+				condition += "AND season='" + season.trim() +  "' ";
+			}
+			if (category != null && category.trim() != "") {
+				condition += "AND cat_id='" + category.trim() + "' ";
+			}
+			System.out.println(condition);
+
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT customer, SUM(sales) as sales FROM sales_by_customer "
-							+ seasonCondition
-							+ "GROUP BY customer ORDER BY sales DESC LIMIT 10 OFFSET ?;");
+					.prepareStatement("SELECT sales_by_customer.customer, SUM(sales_by_customer.sales) as sales FROM sales_by_customer, sales_by_product, products "
+							+ condition
+							+ "GROUP BY sales_by_customer.customer ORDER BY sales DESC LIMIT 10 OFFSET ?;");
+			System.out.println(preparedStatement.toString());
 			preparedStatement.setInt(1, offset);
 			result = preparedStatement.executeQuery();
 			while (result.next()) {
 				SalesByCustomer sale = new SalesByCustomer();
-				sale.setSales(result.getInt("sales"));
+				sale.setSales(result.getLong("sales"));
 				try {
 					sale.setSeason(result.getString("season"));
 				} catch (Exception e) {

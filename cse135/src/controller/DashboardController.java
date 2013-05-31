@@ -113,7 +113,7 @@ public class DashboardController extends HttpServlet {
 			// Generate customers
 			System.out.println("Generating customers");
 			List<SalesByCustomer> salesByCustomer = dao.getSalesByCustomer(
-					quarter, rowsOffset, state);
+					quarter, rowsOffset, state, category);
 			request.setAttribute("customers", salesByCustomer);
 			HashMap<Integer, HashMap<Integer, Integer>> hmCustomers = new HashMap<Integer, HashMap<Integer, Integer>>();
 
