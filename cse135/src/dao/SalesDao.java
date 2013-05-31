@@ -28,7 +28,7 @@ public class SalesDao {
 	}
 
 	public List<SalesByState> getSalesByState(String season, int offset,
-			String state) {
+			String category, String age, String state) {
 		ResultSet result = null;
 		List<SalesByState> sales = new ArrayList<SalesByState>();
 		try {
@@ -67,12 +67,19 @@ public class SalesDao {
 		}
 		return sales;
 	}
+	
+	public String toRange(String age) {
+		int value = Integer.parseInt(age);
+		Integer low = value;
+		Integer high = low + 9;
+		return low.toString() + " AND " + high.toString();
+	}
 
-	public List<SalesByCustomer> getSalesByCustomer(String season, int offset, String state, String category) {
+	public List<SalesByCustomer> getSalesByCustomer(String season, int offset, String state, String category, String age) {
 		ResultSet result = null;
 		List<SalesByCustomer> sales = new ArrayList<SalesByCustomer>();
 		try {
-			String condition = "WHERE products.sku = sales_by_product.sku AND sales_by_customer.customer=sales_by_product.customer ";
+			String condition = "WHERE products.sku = sales_by_product.sku AND sales_by_customer.customer=sales_by_product.customer AND customers.id=sales_by_product.customer ";
 			if (state != null && state.trim() != "") {
 				condition += "AND state='" + state.trim() +  "' ";
 			}
@@ -82,10 +89,13 @@ public class SalesDao {
 			if (category != null && category.trim() != "") {
 				condition += "AND cat_id='" + category.trim() + "' ";
 			}
+			if (age != null && age.trim() != "") {
+				condition += "AND age BETWEEN " + toRange(age) + " ";
+			}
 			System.out.println(condition);
 
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT sales_by_customer.customer, SUM(sales_by_customer.sales) as sales FROM sales_by_customer, sales_by_product, products "
+					.prepareStatement("SELECT sales_by_customer.customer, SUM(sales_by_customer.sales) as sales FROM customers, sales_by_customer, sales_by_product, products "
 							+ condition
 							+ "GROUP BY sales_by_customer.customer ORDER BY sales DESC LIMIT 10 OFFSET ?;");
 			System.out.println(preparedStatement.toString());
@@ -112,12 +122,12 @@ public class SalesDao {
 	}
 
 	public List<SalesByProduct> getProducts(String state, String season,
-			String category, int offset) {
+			String category, String age, int offset) {
 		ResultSet result = null;
 		List<SalesByProduct> sales = new ArrayList<SalesByProduct>();
 		System.out.println(state + season);
 		try {
-			String condition = " WHERE products.sku = sales_by_product.sku ";
+			String condition = " WHERE products.sku = sales_by_product.sku AND sales_by_product.customer = customers.id ";
 			if (state != null && state.trim() != "") {
 				condition += "AND state='" + state.trim() +  "' ";
 			}
@@ -126,10 +136,13 @@ public class SalesDao {
 			}
 			if (category != null && category.trim() != "") {
 				condition += "AND cat_id='" + category.trim() + "' ";
+			} 
+			if (age != null && age.trim() != "") {
+				condition += "AND age BETWEEN " + toRange(age) + " ";
 			}
 			System.out.println(condition);
 
-			String query = "SELECT products.sku, SUM(sales) AS sales FROM sales_by_product, products "
+			String query = "SELECT products.sku, SUM(sales) AS sales FROM sales_by_product, products, customers "
 					+ condition
 					+ "GROUP BY products.sku ORDER BY sales DESC LIMIT 10 OFFSET ?;";
 			PreparedStatement preparedStatement = connection

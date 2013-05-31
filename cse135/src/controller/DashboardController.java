@@ -85,13 +85,13 @@ public class DashboardController extends HttpServlet {
 		request.setAttribute("statesList", STATES);
 
 		List<SalesByProduct> products = dao.getProducts(state, quarter,
-				category, colsOffset);
+				category, age, colsOffset);
 		request.setAttribute("products", products);
 
 		if (rows != null && rows.equals("s")) {
 			System.out.println("Generating states");
 			List<SalesByState> salesByState = dao.getSalesByState(quarter,
-					rowsOffset, state);
+					rowsOffset, category, age, state);
 			request.setAttribute("states", salesByState);
 			HashMap<String, HashMap<Integer, Integer>> hmStates = new HashMap<String, HashMap<Integer, Integer>>();
 
@@ -113,7 +113,7 @@ public class DashboardController extends HttpServlet {
 			// Generate customers
 			System.out.println("Generating customers");
 			List<SalesByCustomer> salesByCustomer = dao.getSalesByCustomer(
-					quarter, rowsOffset, state, category);
+					quarter, rowsOffset, state, category, age);
 			request.setAttribute("customers", salesByCustomer);
 			HashMap<Integer, HashMap<Integer, Integer>> hmCustomers = new HashMap<Integer, HashMap<Integer, Integer>>();
 
