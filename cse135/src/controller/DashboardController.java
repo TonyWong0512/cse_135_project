@@ -93,14 +93,14 @@ public class DashboardController extends HttpServlet {
 			List<SalesByState> salesByState = dao.getSalesByState(quarter,
 					rowsOffset, category, age, state);
 			request.setAttribute("states", salesByState);
-			HashMap<String, HashMap<Integer, Integer>> hmStates = new HashMap<String, HashMap<Integer, Integer>>();
+			HashMap<String, HashMap<Integer, String>> hmStates = new HashMap<String, HashMap<Integer, String>>();
 
 			for (SalesByState s : salesByState) {
 				// This hashmap contains all the sales for each product.
 				// There's one of this per customer
-				HashMap<Integer, Integer> hmProducts = new HashMap<Integer, Integer>();
+				HashMap<Integer, String> hmProducts = new HashMap<Integer, String>();
 				for (SalesByProduct p : products) {
-					int cell = dao.getSalesByCustomerAndState(s.getState(),
+					String cell = dao.getSalesByCustomerAndState(s.getState(),
 							p.getProduct());
 					hmProducts.put(p.getProduct().getId(), cell);
 				}
@@ -115,14 +115,14 @@ public class DashboardController extends HttpServlet {
 			List<SalesByCustomer> salesByCustomer = dao.getSalesByCustomer(
 					quarter, rowsOffset, state, category, age);
 			request.setAttribute("customers", salesByCustomer);
-			HashMap<Integer, HashMap<Integer, Long>> hmCustomers = new HashMap<Integer, HashMap<Integer, Long>>();
+			HashMap<Integer, HashMap<Integer, String>> hmCustomers = new HashMap<Integer, HashMap<Integer, String>>();
 
 			for (SalesByCustomer c : salesByCustomer) {
 				// This hashmap contains all the sales for each product.
 				// There's one of this per customer
-				HashMap<Integer, Long> hmProducts = new HashMap<Integer, Long>();
+				HashMap<Integer, String> hmProducts = new HashMap<Integer, String>();
 				for (SalesByProduct p : products) {
-					long cell = dao.getSalesByCustomerAndProduct(
+					String cell = dao.getSalesByCustomerAndProduct(
 							c.getCustomer(), p.getProduct(), quarter);
 					hmProducts.put(p.getProduct().getId(), cell);
 					// System.out.println(hmCustomers);

@@ -168,10 +168,10 @@ public class SalesDao {
 		return sales;
 	}
 
-	public long getSalesByCustomerAndProduct(User customer, Product product,
+	public String getSalesByCustomerAndProduct(User customer, Product product,
 			String season) {
 		ResultSet result = null;
-		long sales = 0;
+		String sales = "";
 		SalesByProduct sale = new SalesByProduct();
 		try {
 			String condition = "";
@@ -179,7 +179,7 @@ public class SalesDao {
 				condition += "AND season='" + season.trim() + "' ";
 			}
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT SUM(sales) AS sales FROM sales_by_product WHERE customer = ? AND sku = ? "
+					.prepareStatement("SELECT SUM(num_sales) AS num_sales, SUM(sales) AS sales FROM sales_by_product WHERE customer = ? AND sku = ? "
 							+ condition
 							+ "GROUP BY sku;");
 			preparedStatement.setInt(1, customer.getId());
@@ -187,7 +187,7 @@ public class SalesDao {
 			result = preparedStatement.executeQuery();
 
 			while (result.next()) {
-				sales = result.getLong("sales");
+				sales = "$ " + result.getLong("sales") + "-" + result.getInt("num_sales");
 				System.out.println(customer.getName() + " " + product.getName()
 						+ " " + result.getInt("sales"));
 			}
@@ -200,18 +200,18 @@ public class SalesDao {
 
 	}
 
-	public int getSalesByCustomerAndState(String state, Product product) {
+	public String getSalesByCustomerAndState(String state, Product product) {
 		ResultSet result = null;
-		int sale = 0;
+		String sale = "";
 		try {
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT SUM(sales) AS sales FROM sales_by_product WHERE state = ? AND sku = ? GROUP BY sku;");
+					.prepareStatement("SELECT SUM(num_sales) AS num_sales, SUM(sales) AS sales FROM sales_by_product WHERE state = ? AND sku = ? GROUP BY sku;");
 			preparedStatement.setString(1, state);
 			preparedStatement.setInt(2, product.getId());
 			result = preparedStatement.executeQuery();
 
 			while (result.next()) {
-				sale = result.getInt("sales");
+				sale = "$ " + result.getLong("sales") + "-" + result.getInt("num_sales");
 			}
 			result.close();
 			connection.commit();
