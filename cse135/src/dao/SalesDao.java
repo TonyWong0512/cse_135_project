@@ -132,7 +132,8 @@ public class SalesDao {
 		return sales;
 	}
 
-	public List<SalesByCustomer> getSalesByCustomer(String season, int offset, String state) {
+	public List<SalesByCustomer> getSalesByCustomer(String season, int offset,
+			String state) {
 		ResultSet result = null;
 		List<SalesByCustomer> sales = new ArrayList<SalesByCustomer>();
 		try {
@@ -140,8 +141,11 @@ public class SalesDao {
 			if (season != null && season.trim() != "") {
 				// State and season
 				if (state != null && state.trim() != "") {
-					seasonCondition = ", customers WHERE sales_by_customer.customer = customers.id AND sales_by_customer.season='" + season
-							+ "' AND customers.state='" + state.trim() + "' ";
+					seasonCondition = ", customers WHERE sales_by_customer.customer = customers.id AND sales_by_customer.season='"
+							+ season
+							+ "' AND customers.state='"
+							+ state.trim()
+							+ "' ";
 				} else {
 					// season
 					seasonCondition = "WHERE season='" + season + "' ";
@@ -149,7 +153,8 @@ public class SalesDao {
 			} else {
 				// State
 				if (state != null && state.trim() != "") {
-					seasonCondition = ", customers WHERE sales_by_customer.customer = customers.id AND customers.state='" + state.trim() + "' ";
+					seasonCondition = ", customers WHERE sales_by_customer.customer = customers.id AND customers.state='"
+							+ state.trim() + "' ";
 				}
 			}
 			PreparedStatement preparedStatement = connection
@@ -186,10 +191,10 @@ public class SalesDao {
 		try {
 			String condition = " WHERE products.sku = sales_by_product.sku ";
 			if (state != null && state.trim() != "") {
-				condition += "AND state='" + state.trim() +  "' ";
+				condition += "AND state='" + state.trim() + "' ";
 			}
 			if (season != null && season.trim() != "") {
-				condition += "AND season='" + season.trim() +  "' ";
+				condition += "AND season='" + season.trim() + "' ";
 			}
 			if (category != null && category.trim() != "") {
 				condition += "AND cat_id='" + category.trim() + "' ";
@@ -223,13 +228,20 @@ public class SalesDao {
 		return sales;
 	}
 
-	public int getSalesByCustomerAndProduct(User customer, Product product) {
+	public int getSalesByCustomerAndProduct(User customer, Product product,
+			String season) {
 		ResultSet result = null;
 		int sales = 0;
 		SalesByProduct sale = new SalesByProduct();
 		try {
+			String condition = "";
+			if (season != null && season.trim() != "") {
+				condition += "AND season='" + season.trim() + "' ";
+			}
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT SUM(sales) AS sales FROM sales_by_product WHERE customer = ? AND sku = ? GROUP BY sku;");
+					.prepareStatement("SELECT SUM(sales) AS sales FROM sales_by_product WHERE customer = ? AND sku = ? "
+							+ condition
+							+ "GROUP BY sku;");
 			preparedStatement.setInt(1, customer.getId());
 			preparedStatement.setInt(2, product.getId());
 			result = preparedStatement.executeQuery();

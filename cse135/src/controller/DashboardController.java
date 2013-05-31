@@ -123,7 +123,7 @@ public class DashboardController extends HttpServlet {
 				HashMap<Integer, Integer> hmProducts = new HashMap<Integer, Integer>();
 				for (SalesByProduct p : products) {
 					int cell = dao.getSalesByCustomerAndProduct(
-							c.getCustomer(), p.getProduct());
+							c.getCustomer(), p.getProduct(), quarter);
 					hmProducts.put(p.getProduct().getId(), cell);
 					// System.out.println(hmCustomers);
 				}
