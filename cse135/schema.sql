@@ -60,7 +60,7 @@ BEGIN
 		ELSE 'winter' END;
 END$$ LANGUAGE 'plpgsql';
 
-CREATE INDEX ON customers(id, age);
+CREATE INDEX ON customers(id);
 CREATE INDEX ON sales(id);
 CREATE INDEX ON sales_by_product(state);
 CREATE INDEX ON products(cat_id);
