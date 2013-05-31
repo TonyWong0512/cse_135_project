@@ -59,3 +59,8 @@ BEGIN
 		WHEN month >= 9 AND month <= 11 THEN 'fall'
 		ELSE 'winter' END;
 END$$ LANGUAGE 'plpgsql';
+
+CREATE INDEX ON customers(id);
+CREATE INDEX ON sales(id);
+CREATE INDEX ON sales_by_product(state);
+CREATE INDEX ON products(cat_id);
