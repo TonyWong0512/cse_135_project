@@ -129,10 +129,10 @@ public class SalesDao {
 		try {
 			String condition = " WHERE products.sku = sales_by_product.sku AND sales_by_product.customer = customers.id ";
 			if (state != null && state.trim() != "") {
-				condition += "AND state='" + state.trim() +  "' ";
+				condition += "AND state='" + state.trim() + "' ";
 			}
 			if (season != null && season.trim() != "") {
-				condition += "AND season='" + season.trim() +  "' ";
+				condition += "AND season='" + season.trim() + "' ";
 			}
 			if (category != null && category.trim() != "") {
 				condition += "AND cat_id='" + category.trim() + "' ";
@@ -169,13 +169,20 @@ public class SalesDao {
 		return sales;
 	}
 
-	public int getSalesByCustomerAndProduct(User customer, Product product) {
+	public int getSalesByCustomerAndProduct(User customer, Product product,
+			String season) {
 		ResultSet result = null;
 		int sales = 0;
 		SalesByProduct sale = new SalesByProduct();
 		try {
+			String condition = "";
+			if (season != null && season.trim() != "") {
+				condition += "AND season='" + season.trim() + "' ";
+			}
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("SELECT SUM(sales) AS sales FROM sales_by_product WHERE customer = ? AND sku = ? GROUP BY sku;");
+					.prepareStatement("SELECT SUM(sales) AS sales FROM sales_by_product WHERE customer = ? AND sku = ? "
+							+ condition
+							+ "GROUP BY sku;");
 			preparedStatement.setInt(1, customer.getId());
 			preparedStatement.setInt(2, product.getId());
 			result = preparedStatement.executeQuery();
