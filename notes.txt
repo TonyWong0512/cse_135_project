@@ -1,0 +1,3 @@
+We chose to create three materialized views for this project: sales_by_customer, sales_by_product and sales_by_state. These are generated using triggers after every insertion. Sales_by_customer is used for getting the ordered list of customers and it contains how much every customer has spent by season; sales_by_product it's useful for getting the ordered list of products and it's useful for getting the state, the season and the total sales for one product; the last materialized view sales_by_state is used for getting the ordered list of states and it's total sales per season.
+
+We created indices on customers.id, sales.id, sales_by_product.state and products.cat_id to speed up the join statements
