@@ -37,7 +37,7 @@ public class SalesDao {
 				condition += "AND customers.state='" + state.trim() +  "' ";
 			}
 			if (season != null && season.trim() != "") {
-				condition += "AND season='" + season.trim() +  "' ";
+				condition += "AND sales_by_product.season='" + season.trim() +  "' AND sales_by_product.season=sales_by_state.season AND sales_by_customer.season = sales_by_state.season ";
 			}
 			if (category != null && category.trim() != "") {
 				condition += "AND cat_id='" + category.trim() + "' ";
@@ -83,7 +83,7 @@ public class SalesDao {
 				condition += "AND customers.state='" + state.trim() +  "' ";
 			}
 			if (season != null && season.trim() != "") {
-				condition += "AND season='" + season.trim() +  "' ";
+				condition += "AND sales_by_product.season='" + season.trim() +  "' ";
 			}
 			if (category != null && category.trim() != "") {
 				condition += "AND cat_id='" + category.trim() + "' ";
@@ -131,7 +131,7 @@ public class SalesDao {
 				condition += "AND customers.state='" + state.trim() + "' ";
 			}
 			if (season != null && season.trim() != "") {
-				condition += "AND season='" + season.trim() + "' ";
+				condition += "AND sales_by_product.season='" + season.trim() +  "' ";
 			}
 			if (category != null && category.trim() != "") {
 				condition += "AND cat_id='" + category.trim() + "' ";
