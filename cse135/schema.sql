@@ -1,8 +1,8 @@
-DROP TABLE users CASCADE;
-DROP TABLE categories CASCADE;
-DROP TABLE products CASCADE;
-DROP TABLE orders CASCADE;
-DROP TABLE ordered CASCADE;
+﻿DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS orders CASCADE;
+DROP TABLE IF EXISTS ordered CASCADE;
 
 create table users (
 	id serial primary key,
@@ -66,12 +66,10 @@ INSERT INTO categories (name, description) VALUES ('sit','mi');
 INSERT INTO categories (name, description) VALUES ('consequat','nec, euismod in, dolor. Fusce feugiat. Lorem ipsum dolor sit');
 INSERT INTO categories (name, description) VALUES ('Cum','non, cursus non, egestas a,');
 INSERT INTO categories (name, description) VALUES ('ultrices','massa. Suspendisse eleifend. Cras');
-INSERT INTO categories (name, description) VALUES ('nulla','varius ultrices, mauris');
 INSERT INTO categories (name, description) VALUES ('vitae','nec enim. Nunc ut erat. Sed');
 INSERT INTO categories (name, description) VALUES ('Phasellus','nec metus facilisis lorem tristique');
 INSERT INTO categories (name, description) VALUES ('torquent','vitae');
 INSERT INTO categories (name, description) VALUES ('ut','habitant morbi tristique senectus');
-INSERT INTO categories (name, description) VALUES ('ultrices','congue, elit sed consequat auctor,');
 INSERT INTO categories (name, description) VALUES ('velit','tempor erat neque non quam. Pellentesque habitant morbi');
 INSERT INTO categories (name, description) VALUES ('auctor','ut ipsum ac mi eleifend');
 INSERT INTO categories (name, description) VALUES ('vel','egestas rhoncus.');
@@ -91,5 +89,3 @@ INSERT INTO categories (name, description) VALUES ('arcu','placerat, augue. Sed 
 INSERT INTO categories (name, description) VALUES ('imperet','a, enim.');
 INSERT INTO categories (name, description) VALUES ('varis','semper rutrum. Fusce dolor quam,');
 INSERT INTO categories (name, description) VALUES ('Nunca','mus. Proin vel arcu eu odio');
-INSERT INTO categories (name, description) VALUES ('ar','placerat, augue. Sed molestie. Sed id risus quis');
-
