@@ -1,6 +1,5 @@
 function productAction(id, actionType) {
 	var params = {sku: "", name: "", price: "", category: ""};
-	var pid = null;
 
 	var elements = ["sku", "name", "price", "category"];
 
@@ -20,15 +19,24 @@ function productAction(id, actionType) {
 }
 
 function makeRequest(params, actionType, id){
-
-	$.post("editproduct?id="+id, { 
-		sku: params.sku, 
-		name: params.name, 
-		price: params.price, 
-		category: params.category },
-		function(data){
-			$('#response').html("Update Complete");
-		});
+	switch (actionType){
+		case "update":
+			$.post("editproduct?id="+id, { 
+				sku: params.sku, 
+				name: params.name, 
+				price: params.price, 
+				category: params.category },
+				function(data){
+					$('#response').html("Update Complete");
+				});
+			break;
+		case "delete":
+			$.get("deleteproduct?id="+id, {  },
+				function(data){
+					$('#response').html("Deletion Complete");
+				});
+			break;
+	}
 
 
 /*$.ajax({
