@@ -23,8 +23,13 @@ public class UserDao {
 					.prepareStatement("insert into users(name, role, age, state) values(?, ?, ?, ?)");
 			preparedStatement.setString(1, u.getName());
 			preparedStatement.setString(2, u.getRole());
-			preparedStatement.setShort(3, u.getAge());
-			preparedStatement.setString(4, u.getState());
+			if (u.getRole().equalsIgnoreCase("owner")){
+				preparedStatement.setShort(3, (short) -1);
+				preparedStatement.setString(4, null);
+			}else{
+				preparedStatement.setShort(3, u.getAge());
+				preparedStatement.setString(4, u.getState());
+			}			
 			result = preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

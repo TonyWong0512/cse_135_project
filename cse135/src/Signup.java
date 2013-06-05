@@ -44,7 +44,12 @@ public class Signup extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String name = request.getParameter("name");
 		String role = request.getParameter("role");
-		short age =  Short.parseShort(request.getParameter("age"));
+		short age;
+		try {
+			age = Short.parseShort(request.getParameter("age"));
+		} catch (NumberFormatException e) {
+			age = -1;
+		}
 		String state = request.getParameter("state");
 		System.out.println(role);
 		User u = new User(name, role, age, state);
