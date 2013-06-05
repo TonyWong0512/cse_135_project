@@ -30,6 +30,13 @@ public class Product extends HttpServlet {
 		if (!Browse.isOwner(request, response)) {
 			response.sendRedirect("browse");
 		} else {
+			String name = request.getParameter("name");
+			String category = request.getParameter("category");
+			name = (name == null) ? "" : name.trim();
+			category = (category == null) ? "" : category.trim();
+			request.setAttribute("category", category);
+			request.setAttribute("name", name);
+			
 			Browse.loadProducts(request);
 			getServletContext().getRequestDispatcher("/product.jsp").forward(
 					request, response);
