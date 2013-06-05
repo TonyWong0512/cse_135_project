@@ -1,6 +1,5 @@
 function productAction(id, actionType) {
-	var params = new Array();
-	var pid = null;
+	var params = {sku: "", name: "", price: "", category: ""};
 
 	var elements = ["sku", "name", "price", "category"];
 
@@ -13,21 +12,34 @@ function productAction(id, actionType) {
 	    var element = $("#" + ele);
 	    var value = element.val();
 		
-		params.push(key + "=" + value);
+		params[key] = value;
 	});
 
-	makeRequest(params, actionType, pid);
+	makeRequest(params, actionType, id);
 }
 
-function makeRequest(params, actionType, pid){
+function makeRequest(params, actionType, id){
+	switch (actionType){
+		case "update":
+			$.post("editproduct?id="+id, { 
+				sku: params.sku, 
+				name: params.name, 
+				price: params.price, 
+				category: params.category },
+				function(data){
+					$('#response').html("Update Complete");
+				});
+			break;
+		case "delete":
+			$.get("deleteproduct?id="+id, {  },
+				function(data){
+					$('#response').html("Deletion Complete");
+				});
+			break;
+	}
 
-	$.post("test.php", { 
-		name: "John", 
-		time: "2pm" 
-	});
 
-
-$.ajax({
+/*$.ajax({
 	  type: 'POST',
 	  url: "process_ajax_request.jsp?" + params.join("&"),
 	  beforeSend:function(){
@@ -62,6 +74,6 @@ $.ajax({
 		// Failed request
 		$('#status').html('Oops! Error.');
 	  }
-	});
+	});*/
 	
 }

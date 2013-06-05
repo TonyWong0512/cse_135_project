@@ -94,6 +94,7 @@ category = (category == null) ? "" : category.trim();
 			</div>
 	</div>
 </div>
+<h3 id="response"></h3>
 <script type="text/javascript" src="products_js.js"></script>
 <script>
     document.getElementById("category_menu").onchange = function() {
