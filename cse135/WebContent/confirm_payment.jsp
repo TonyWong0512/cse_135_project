@@ -8,7 +8,7 @@
 			<tr>
 				<th>Product</th>
 				<th>Price</th>
-				<th>Ammount</th>
+				<th>Amount</th>
 			</tr>
 		</thead>
 		<tbody>

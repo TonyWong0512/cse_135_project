@@ -1,6 +1,6 @@
 package model;
 
-public class Category {
+public class Category implements Comparable {
 
 	private int id;
 	private String name;
@@ -34,6 +34,13 @@ public class Category {
 	public String toString() {
 		return "Category [id=" + id + ", name=" + name
 				+ ", description=" + description + "]";
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		Category c = (Category) o;
+		return this.getName().compareTo(c.getName());
 	}
 
 }

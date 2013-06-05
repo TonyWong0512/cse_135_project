@@ -1,12 +1,17 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import model.Category;
+
+import dao.CategoryDao;
 
 public class DashboardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -19,7 +24,13 @@ public class DashboardController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		CategoryDao cdao = new CategoryDao();
+		List<Category> categories = cdao.getAllCategories();
+		java.util.Collections.sort(categories);
+		System.out.println(categories);
+		
 		request.setAttribute("states", STATES);
+		request.setAttribute("categories", categories);
 		RequestDispatcher view = request.getRequestDispatcher("/dashboard.jsp");
 		view.forward(request, response);
 	}
