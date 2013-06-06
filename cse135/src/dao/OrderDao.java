@@ -77,10 +77,10 @@ public class OrderDao {
 		Map<String, Integer> result = new HashMap<String, Integer>();
 		try {
 			PreparedStatement ps = connection
-					.prepareStatement("select sum(cost), state, category from ordered, order, products, users where order.id = ordered.order_pk and products.id = ordered.product_pk and user_pk=users.id group by state, category");
+					.prepareStatement("select sum(price) as cost, state, category from ordered, orders, products, users where orders.id = ordered.order_pk and products.id = ordered.product and user_pk=users.id group by state, category");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				int cost = rs.getInt("sum(cost)");
+				int cost = rs.getInt("cost");
 				String state = rs.getString("state").toUpperCase();
 				String category = String.valueOf(rs.getInt("category"));
 				result.put(category + "," + state, cost);
