@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.Category;
 
 import dao.CategoryDao;
+import dao.OrderDao;
 
 public class DashboardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -25,12 +26,15 @@ public class DashboardController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		CategoryDao cdao = new CategoryDao();
+		OrderDao odao = new OrderDao();
 		List<Category> categories = cdao.getAllCategories();
 		java.util.Collections.sort(categories);
 		System.out.println(categories);
 		
 		request.setAttribute("states", STATES);
 		request.setAttribute("categories", categories);
+		request.setAttribute("totals", odao.getTotals());
+		System.out.println(odao.getTotals());
 		RequestDispatcher view = request.getRequestDispatcher("/dashboard.jsp");
 		view.forward(request, response);
 	}

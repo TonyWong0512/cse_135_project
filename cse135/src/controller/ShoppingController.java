@@ -87,13 +87,14 @@ public class ShoppingController extends HttpServlet {
 
 		if (action != null && action.equals("add_to_cart")) {
 			try {
+				int quantity = Integer.parseInt(request.getParameter("quantity"));
 				int id_product_buying = Integer.parseInt(request
 						.getParameter("id"));
 				// Create the order
 				Ordered ordered = new Ordered();
 				Product p = pdao.getProductById(id_product_buying).get(0);
 				ordered.setProduct(p);
-				ordered.setQuantity(Integer.parseInt(request.getParameter("quantity")));
+				ordered.setQuantity(quantity);
 				// Add it to the cart
 				cart.add(ordered);
 				session.setAttribute("shopping_cart", cart);
@@ -110,7 +111,7 @@ public class ShoppingController extends HttpServlet {
 			int order_pk = odao.createOrder(udao.getUser(user_name));
 			// Iterate over the cart
 			for (Ordered ordered : cart) {
-				odao.addProduct(ordered.getProduct(), order_pk);
+				odao.addProduct(ordered.getProduct(), ordered.getQuantity(), order_pk);
 			}
 			
 			request.setAttribute("last_cart", cart);

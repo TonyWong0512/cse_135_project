@@ -44,6 +44,14 @@ public class OrderDao {
 		return ret;
 	}
 	
+	public int addProduct(Product product, int quantity, int user_pk) {
+		int result = 0;
+		while (--quantity > 0) {
+			result += addProduct(product, user_pk);
+		}
+		return result;
+	}
+	
 	/**
 	 * @param user 
 	 * @param Product product, int quantity, int order_pk
