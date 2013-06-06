@@ -1,4 +1,4 @@
-DROP TABLE users CASCADE;
+﻿DROP TABLE users CASCADE;
 DROP TABLE categories CASCADE;
 DROP TABLE products CASCADE;
 DROP TABLE orders CASCADE;
@@ -9,7 +9,7 @@ create table users (
 	name text unique not null,
 	role text not null,
 	age smallint,
-	state text not null
+	state text
 );
 
 create table categories (
