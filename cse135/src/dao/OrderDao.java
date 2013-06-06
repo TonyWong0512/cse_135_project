@@ -81,8 +81,11 @@ public class OrderDao {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				double cost = rs.getDouble("cost");
-				String state = rs.getString("state").toUpperCase();
+				String state = rs.getString("state");
+				if (state == null) continue;
+				state = state.toUpperCase();
 				String category = String.valueOf(rs.getInt("category"));
+				
 				result.put(category + "," + state, cost);
 			}
 			rs.close();
