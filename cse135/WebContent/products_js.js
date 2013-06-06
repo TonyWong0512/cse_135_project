@@ -27,13 +27,48 @@ function makeRequest(params, actionType, id){
 				price: params.price, 
 				category: params.category },
 				function(data){
+					// $('#'+id' td input')[0].value = params.sku;
+					// $('#'+id' td input')[1].value = params.name;
+					// $('#'+id' td input')[2].value = params.price;
+					// $('#'+id' td select').val(params.category);
 					$('#response').html("Update Complete");
 				});
+
 			break;
 		case "delete":
 			$.get("deleteproduct?id="+id, {  },
 				function(data){
+					$('#'+id).fadeOut(400);
 					$('#response').html("Deletion Complete");
+				});
+			break;
+		case "insert":
+			$.post("product", { 
+				sku: params.sku, 
+				name: params.name, 
+				price: params.price, 
+				category: params.category },
+				function(result){
+					var response = $.parseJSON(result);
+					console.log(response);
+	  				console.log(actionType);
+
+					if (response.success) {
+						var selects = $('#category option').clone();
+						console.log(response.id);
+						console.log('cat: ' + response.category);
+						var html = '<tr id="'+response.id+'"><td> '+response.id+' </td><td><input id="sku_'+response.id+'" size="15" name="sku" value="'+response.sku+'"></td><td><input id="name_'+response.id+'" size="15" name="name" value="'+response.name+'"></td><td><input id="price_'+response.id+'" size="15" name="price" value="'+response.price+'"></td><td><select id="category_'+response.id+'" name="category"></select></td><td><input type="button" id="update_'+response.id+'" value="Update" ><input type="button" id="delete_'+response.id+'" value="Delete"></td></tr>';
+		
+
+						$('#products_table').append(html);
+						$('#update_'+response.id).attr("onclick", "productAction("+response.id+", 'update');return false;");
+						$('#delete_'+response.id).attr("onclick", "productAction("+response.id+", 'delete');return false;");
+						$('#category_'+response.id).append(selects);
+						$('#category_'+response.id).val(response.category);
+	
+						console.log(id);
+						$('#response').html("Insertion Complete");
+					}
 				});
 			break;
 	}

@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.postgresql.util.PSQLException;
+
 import model.Product;
 import util.DbUtil;
 
@@ -28,6 +30,8 @@ public class ProductDao {
 			preparedStatement.setBigDecimal(3, product.getPrice());
 			preparedStatement.setInt(4, product.getCategory());
 			result = preparedStatement.executeUpdate();
+		} catch (PSQLException e) {
+			result = -1;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
