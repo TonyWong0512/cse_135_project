@@ -35,7 +35,7 @@
 				<tr>
 					<th>Product</th>
 					<th>Price</th>
-					<th>Ammount</th>
+					<th>Amount</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -43,7 +43,6 @@
 					<tr>
 						<td><c:out value="${order.product.name}" /></td>
 						<td><c:out value="${order.product.price}" /></td>
-						<td><c:out value="${order.quantity}" /></td>
 					</tr>
 				</c:forEach>
 			</tbody>

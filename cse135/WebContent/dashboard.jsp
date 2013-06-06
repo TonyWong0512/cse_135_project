@@ -20,15 +20,20 @@ function update(msg) {
 <div class="container-fluid">
 	<div class="span12">
 		<table>
-			<tr><td>
+			<tr><th></th>
 			<% for (String state : states) { %>
-				<td><%= state %></td>
+				<th><%= state %></th>
 			<% } %>
-			</td></tr>
-			<% for (Category category : categories) { %>
-				<tr><td>
-				<%= category.getName() %>
-				<td></tr>
+			</tr>
+			<% for (Category category : categories) {
+				if (category == null || category.getName() == null) continue;
+				 %>
+				<tr>
+				<td><%= category.getName() %><td>
+				<% for (String state : states) { %>
+				<td id=<%= category.getId() + "," + state %>>$0.00</td>
+				<% } %>
+				</tr>
 			<% } %>
 		</table>
 	</div>

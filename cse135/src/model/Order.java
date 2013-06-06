@@ -1,29 +1,26 @@
 package model;
 
 public class Order {
-	private Product product;
-	private int quantity;
+	private int id;
+	private int user_pk;
 
-	public Order(Product product, int quantity) {
+	public Order() {
 		super();
-		this.product = product;
-		this.quantity = quantity;
 	}
 
-	public Product getProduct() {
-		return product;
+	public int getId() {
+		return id;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public int getQuantity() {
-		return quantity;
+	public int getUser_pk() {
+		return user_pk;
 	}
 
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+	public void setUser_pk(int user_pk) {
+		this.user_pk = user_pk;
 	}
-
 }

@@ -35,7 +35,6 @@ create table orders (
 create table ordered (
 	id serial primary key,
 	product integer references products(id),
-	quantity smallint not null,
 	order_pk integer references orders(id)
 );
 

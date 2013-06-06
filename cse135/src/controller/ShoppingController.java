@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import model.Order;
+import model.Ordered;
 import model.Product;
 import model.User;
 import dao.OrderDao;
@@ -75,11 +76,11 @@ public class ShoppingController extends HttpServlet {
 		ProductDao pdao = new ProductDao();
 		HttpSession session = request.getSession();
 		// Get old cart
-		List<Order> cart = ((ArrayList<Order>) session
+		List<Ordered> cart = ((ArrayList<Ordered>) session
 				.getAttribute("shopping_cart"));
 		String user_name = (String) session.getAttribute("name");
 		if (cart == null) {
-			cart = new ArrayList<Order>();
+			cart = new ArrayList<Ordered>();
 		}
 		String action = request.getParameter("action");
 		// Add to the cart
@@ -88,14 +89,13 @@ public class ShoppingController extends HttpServlet {
 			try {
 				int id_product_buying = Integer.parseInt(request
 						.getParameter("id"));
-				// Get the product
-				Product product_buying = pdao.getProductById(id_product_buying)
-						.get(0);
 				// Create the order
-				Order order = new Order(product_buying,
-						Integer.parseInt(request.getParameter("quantity")));
+				Ordered ordered = new Ordered();
+				Product p = pdao.getProductById(id_product_buying).get(0);
+				ordered.setProduct(p);
+				ordered.setQuantity(Integer.parseInt(request.getParameter("quantity")));
 				// Add it to the cart
-				cart.add(order);
+				cart.add(ordered);
 				session.setAttribute("shopping_cart", cart);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
@@ -109,8 +109,8 @@ public class ShoppingController extends HttpServlet {
 			UserDao udao = new UserDao();
 			int order_pk = odao.createOrder(udao.getUser(user_name));
 			// Iterate over the cart
-			for (Order order : cart) {
-				odao.addProduct(order.getProduct(), order.getQuantity(), order_pk);
+			for (Ordered ordered : cart) {
+				odao.addProduct(ordered.getProduct(), order_pk);
 			}
 			
 			request.setAttribute("last_cart", cart);
