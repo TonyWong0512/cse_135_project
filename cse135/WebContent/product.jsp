@@ -28,16 +28,16 @@ category = (category == null) ? "" : category.trim();
 		
 		<form action="product" method="post" class="span4">
 			<h2>Add</h2>
-			<label>Name</label><input type="text" name="name"></input><br>
-			<label>SKU</label><input type="text" name="sku"></input><br>
-			<label>List price</label><input type="text" name="price"></input><br>
+			<label>Name</label><input type="text" name="name" id="name"></input><br>
+			<label>SKU</label><input type="text" name="sku" id="sku"></input><br>
+			<label>List price</label><input type="text" name="price" id="price"></input><br>
 			<label>Category</label>
-			<select name="category">
+			<select name="category" id="category">
 			<c:forEach var="cat" items="${categories}">
 				<option value="<c:out value="${cat.id}" />"><c:out value="${cat.name}" /></option>
 			</c:forEach>
 			</select><br>
-			<input type="submit" value="Add product">
+			<input type="submit" onClick="productAction(null,'insert'); return false;" value="Add product">
 		</form>
 
 	</div>
@@ -53,7 +53,7 @@ category = (category == null) ? "" : category.trim();
 		</div>
 		</c:forEach> -->
 		<div class="span12">
-				<table class="table">
+				<table class="table" id="products_table">
 					<tr>
 						<th>ID</th>
 						<th>SKU</th>

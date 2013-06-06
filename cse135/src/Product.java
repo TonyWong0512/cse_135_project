@@ -1,6 +1,7 @@
 
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -58,10 +59,32 @@ public class Product extends HttpServlet {
 			int category = Integer.parseInt(request.getParameter("category"));
 			ProductDao dao = new ProductDao();
 			model.Product p = new model.Product(name, sku, price, category);
-			dao.addProduct(p);
-			request.setAttribute("product", p);
-			getServletContext().getRequestDispatcher("/productconfirm.jsp")
-					.forward(request, response);
+			
+			org.json.simple.JSONObject result = new org.json.simple.JSONObject();
+			
+			if (dao.addProduct(p) >= 0){
+				
+				request.setAttribute("product", p);
+				System.out.println("inserting");
+				
+				List<model.Product> listOfInserted =  dao.getProductByName(name);
+				model.Product insertedProduct = dao.getProductByName(name).get(0);
+				
+
+				result.put("success",true);
+				result.put("id",insertedProduct.getId());
+				result.put("sku",insertedProduct.getSKU());
+				result.put("name",insertedProduct.getName());
+				result.put("price",insertedProduct.getPrice());
+				result.put("category", insertedProduct.getCategory());
+
+				response.getWriter().print(result);
+			}else{
+				result.put("success",false);
+				response.getWriter().print(result);
+			}
+			
+
 
 		}
 	}
