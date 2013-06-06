@@ -13,7 +13,12 @@ setInterval(function() {
 }, 2000);
 
 function update(msg) {
-	console.log('received msg with length ' + msg.length);
+	$(msg).find("total").each(
+			function() {
+				key = $(this).find('key').text();
+				value = $(this).find('value').text();
+				document.getElementById(key).innerHTML = '$' + value;
+			});
 }
 </script>
 
