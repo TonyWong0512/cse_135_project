@@ -44,7 +44,7 @@ public class ShoppingController extends HttpServlet {
 		ProductDao dao = new ProductDao();
 		HttpSession session = request.getSession();
 		// Get old cart
-		List<Order> cart = ((ArrayList<Order>) session
+		List<Ordered> cart = ((ArrayList<Ordered>) session
 				.getAttribute("shopping_cart"));
 
 		String action = request.getParameter("action");
