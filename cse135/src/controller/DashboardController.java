@@ -29,12 +29,8 @@ public class DashboardController extends HttpServlet {
 		OrderDao odao = new OrderDao();
 		List<Category> categories = cdao.getAllCategories();
 		java.util.Collections.sort(categories);
-		System.out.println(categories);
-		
 		request.setAttribute("states", STATES);
 		request.setAttribute("categories", categories);
-		request.setAttribute("totals", odao.getTotals());
-		System.out.println(odao.getTotals());
 		RequestDispatcher view = request.getRequestDispatcher("/dashboard.jsp");
 		view.forward(request, response);
 	}

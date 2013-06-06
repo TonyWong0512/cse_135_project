@@ -73,14 +73,14 @@ public class OrderDao {
 		return ret;
 	}
 	
-	public Map<String, Integer> getTotals() {
-		Map<String, Integer> result = new HashMap<String, Integer>();
+	public Map<String, Double> getTotals() {
+		Map<String, Double> result = new HashMap<String, Double>();
 		try {
 			PreparedStatement ps = connection
 					.prepareStatement("select sum(price) as cost, state, category from ordered, orders, products, users where orders.id = ordered.order_pk and products.id = ordered.product and user_pk=users.id group by state, category");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				int cost = rs.getInt("cost");
+				double cost = rs.getDouble("cost");
 				String state = rs.getString("state").toUpperCase();
 				String category = String.valueOf(rs.getInt("category"));
 				result.put(category + "," + state, cost);
